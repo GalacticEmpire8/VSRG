@@ -146,6 +146,9 @@ void AMainCharacter::OnBeat()
 
 void AMainCharacter::UseAttack(FName slot)
 {
+	if (hasMovedThisBeat) return;
+	if (!VSRGGameMode->IsOnBeat()) return;
+
 	if (!isAttacking) {
 		UE_LOG(LogTemp, Warning, TEXT("not using attack"));
 		return;
@@ -161,6 +164,8 @@ void AMainCharacter::UseAttack(FName slot)
 		}
 		else UE_LOG(LogTemp, Warning, TEXT("Cant find slot %s"), *slot.ToString());
 	}
+
+	hasMovedThisBeat = true;
 }
 
 void AMainCharacter::OnAttackKeyPressed()
