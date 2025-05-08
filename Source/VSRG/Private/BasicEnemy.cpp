@@ -60,6 +60,8 @@ void ABasicEnemy::Move()
 	//if its equal move both
 	//}
 
+	int EnemyStep = 32; // Distance the enemy moves 
+
 	Player = Cast<AMainCharacter>(UGameplayStatics::GetActorOfClass(this, AMainCharacter::StaticClass()));
 	if (Player) {
 		FVector PlayerLocation = Player->GetActorLocation();
@@ -69,33 +71,33 @@ void ABasicEnemy::Move()
 		if ((abs(PlayerLocation.X - EnemyLocation.X) == abs(PlayerLocation.Y - EnemyLocation.Y)))
 		{
 			if (abs(PlayerLocation.X > EnemyLocation.X) && abs(PlayerLocation.Y > EnemyLocation.Y)) {
-				SetActorLocation(FVector(EnemyLocation.X + 100, EnemyLocation.Y + 100, EnemyLocation.Z));
+				SetActorLocation(FVector(EnemyLocation.X + EnemyStep, EnemyLocation.Y + EnemyStep, EnemyLocation.Z));
 			}
 			else if (abs(PlayerLocation.X < EnemyLocation.X) && abs(PlayerLocation.Y < EnemyLocation.Y)) {
-				SetActorLocation(FVector(EnemyLocation.X - 100, EnemyLocation.Y - 100, EnemyLocation.Z));
+				SetActorLocation(FVector(EnemyLocation.X - EnemyStep, EnemyLocation.Y - EnemyStep, EnemyLocation.Z));
 			}
 			else if (abs(PlayerLocation.X < EnemyLocation.X) && abs(PlayerLocation.Y > EnemyLocation.Y)) {
-				SetActorLocation(FVector(EnemyLocation.X - 100, EnemyLocation.Y + 100, EnemyLocation.Z));
+				SetActorLocation(FVector(EnemyLocation.X - EnemyStep, EnemyLocation.Y + EnemyStep, EnemyLocation.Z));
 			}
 			else if (abs(PlayerLocation.X > EnemyLocation.X) && abs(PlayerLocation.Y > EnemyLocation.Y)) {
-				SetActorLocation(FVector(EnemyLocation.X - 100, EnemyLocation.Y + 100, EnemyLocation.Z));
+				SetActorLocation(FVector(EnemyLocation.X - EnemyStep, EnemyLocation.Y + EnemyStep, EnemyLocation.Z));
 			}
 		}
 		else if (abs(PlayerLocation.X - EnemyLocation.X) > abs(PlayerLocation.Y - EnemyLocation.Y)) {
 			if (PlayerLocation.X > EnemyLocation.X) {
-				SetActorLocation(FVector(EnemyLocation.X + 100, EnemyLocation.Y, EnemyLocation.Z));
+				SetActorLocation(FVector(EnemyLocation.X + EnemyStep, EnemyLocation.Y, EnemyLocation.Z));
 			}
 			else if (PlayerLocation.X < EnemyLocation.X) {
-				SetActorLocation(FVector(EnemyLocation.X - 100, EnemyLocation.Y, EnemyLocation.Z));
+				SetActorLocation(FVector(EnemyLocation.X - EnemyStep, EnemyLocation.Y, EnemyLocation.Z));
 			}
 		}
 		else if (abs(PlayerLocation.X - EnemyLocation.X) < abs(PlayerLocation.Y - EnemyLocation.Y))
 		{
 			if (PlayerLocation.Y > EnemyLocation.Y) {
-				SetActorLocation(FVector(EnemyLocation.X, EnemyLocation.Y + 100, EnemyLocation.Z));
+				SetActorLocation(FVector(EnemyLocation.X, EnemyLocation.Y + EnemyStep, EnemyLocation.Z));
 			}
 			else if (PlayerLocation.Y < EnemyLocation.Y) {
-				SetActorLocation(FVector(EnemyLocation.X, EnemyLocation.Y - 100, EnemyLocation.Z));
+				SetActorLocation(FVector(EnemyLocation.X, EnemyLocation.Y - EnemyStep, EnemyLocation.Z));
 			}
 		}
 		else {
