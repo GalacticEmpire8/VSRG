@@ -20,11 +20,11 @@ private:
 	class AMainCharacter* Player;
 
 	// Beats per Minute
-	int BPM = 60;
+	float BPM = 80; // I changed the BPM to the song's. Hope this doesn't break anything - Gabriel
 	const float beatTolerance = 0.3;
 
 	// Seconds in a minute
-	int SecondsPerMinute = 60;
+	float SecondsPerMinute = 60;
 
 	//Time between beats
 	float TimeBetweenLastBeat;

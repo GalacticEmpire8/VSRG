@@ -81,7 +81,7 @@ void AMainCharacter::SetupPlayerInputComponent(class UInputComponent* InInputCom
 void AMainCharacter::Move(FVector axisValue)
 {
 	FVector direction, startLoc, endLoc;
-	float stepSize = 100;
+	float stepSize = 32;
 
 	direction = axisValue *= stepSize;
 
