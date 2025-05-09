@@ -110,9 +110,10 @@ void AMainCharacter::EnhancedInputMove(const FInputActionValue& Value)
 	inputDirection = FVector(moveValue.X, moveValue.Y, 0.0f);
 
 	if (hasMovedThisBeat) return;
+	if (isAttacking) return;
 
 	if (VSRGGameMode->IsOnBeat()) {
-		if (shouldTakeStep && !isAttacking) {
+		if (shouldTakeStep) {
 			if (moveValue.X > 0.05f || moveValue.X < -0.05f) {
 				FVector moveDirection = FVector(moveValue.X, 0.0f, 0.0f);
 				Move(moveDirection);

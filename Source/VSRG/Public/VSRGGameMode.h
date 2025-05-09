@@ -21,7 +21,7 @@ private:
 
 	// Beats per Minute
 	float BPM = 80; // I changed the BPM to the song's. Hope this doesn't break anything - Gabriel
-	const float beatTolerance = 0.3;
+	const float beatTolerance = 0.35;
 
 	// Seconds in a minute
 	float SecondsPerMinute = 60;
