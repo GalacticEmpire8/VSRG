@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "UObject/NoExportTypes.h"
 #include <VSRGGameMode.h>
+#include "WeaponData.h"
 #include "AttackBase.generated.h"
 
 class AProjectile;
@@ -19,27 +20,44 @@ class VSRG_API UAttackBase : public UObject
 	GENERATED_BODY()
 
 public:
+	int32 damage;
+	int32 cooldown;
+	int32 projectiles;
+	int32 pierce;
+	int32 uses;
+	int32 range;
+	int level;
+
+	FWeaponData* damageRow;
+	FWeaponData* cooldownRow;
+	FWeaponData* projectileRow;
+	FWeaponData* pierceRow;
+	FWeaponData* usesRow;
+	FWeaponData* rangeRow;
+
 	// called when the attack is triggered
 	UFUNCTION(BlueprintNativeEvent, Category = "Attack")
 	void executeAttack(AMainCharacter* instigatorCharacter);
+	
+	void initializeAttack();
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack")
-	float attackDamage;
+	FDataTableRowHandle DamageData;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack")
-	float cooldown;
+	FDataTableRowHandle CooldownData;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack")
-	int projectileCount;
+	FDataTableRowHandle ProjectileData;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack")
-	int pierceCount;
+	FDataTableRowHandle PierceData;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack")
-	int usesCount;
+	FDataTableRowHandle UsesData;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack")
-	float attackRange;
+	FDataTableRowHandle RangeData;
 
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<class AProjectile> projectileActor;

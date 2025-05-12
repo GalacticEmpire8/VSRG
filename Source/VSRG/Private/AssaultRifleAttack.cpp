@@ -7,16 +7,20 @@
 #include "DrawDebugHelpers.h"
 #include <MainCharacter.h>
 #include <Projectile.h>
+#include <WeaponData.h>
+
+
 
 UAssaultRifleAttack::UAssaultRifleAttack()
 {
-	attackDamage = 10.f;
-	cooldown = 1.f;
-	projectileCount = 4;
-	pierceCount = 3;
-	usesCount = 1;
-	attackRange = 10000.f;
-	sprayAngle = 5.f;
+	level = 1;
+	maxBullets = 0;
+	owningCharacter = nullptr;
+}
+
+void UAssaultRifleAttack::initializeAttack()
+{
+	Super();
 }
 
 void UAssaultRifleAttack::executeAttack_Implementation(AMainCharacter* instigatorCharacter)
@@ -24,9 +28,10 @@ void UAssaultRifleAttack::executeAttack_Implementation(AMainCharacter* instigato
 	if (!instigatorCharacter) return;
 	owningCharacter = instigatorCharacter;
 
+	UE_LOG(LogTemp, Warning, TEXT("Damage: %d"), damage);
 
 	bulletsFired = 0;
-	maxBullets = projectileCount;
+	maxBullets = projectiles;
 	UWorld* world = instigatorCharacter->GetWorld();
 	if (world) {
 		UE_LOG(LogTemp, Warning, TEXT("world exists"));
@@ -48,8 +53,8 @@ void UAssaultRifleAttack::FireBurstProjectile()
 
 	UE_LOG(LogTemp, Warning, TEXT("bullets fired: %d, max bullets: %d - firing projectiles"), bulletsFired, maxBullets)
 
-		// Get spawn location and direction
-		FVector spawnLocation = owningCharacter->GetActorLocation();
+	// Get spawn location and direction
+	FVector spawnLocation = owningCharacter->GetActorLocation();
 	FRotator spawnRotation = owningCharacter->inputDirection.Rotation();
 	FVector forwardVector = spawnRotation.Vector();
 	float spreadAngle = FMath::DegreesToRadians(sprayAngle);
@@ -61,9 +66,9 @@ void UAssaultRifleAttack::FireBurstProjectile()
 	AProjectile* projectile = GetWorld()->SpawnActor<AProjectile>(projectileActor, spawnLocation, spawnRotation);
 	if (projectile)
 	{
+		projectile->damage = damage;
 		projectile->SetActorRotation(projectileDirection.Rotation());
 		projectile->projectileComponent->Velocity = projectileDirection * projectile->projectileComponent->InitialSpeed;
-		projectile->damage = attackDamage;
 		projectile->SetLifeSpan(5.f);
 		projectile->SetOwner(owningCharacter);
 	}

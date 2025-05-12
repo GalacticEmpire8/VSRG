@@ -17,6 +17,8 @@ class VSRG_API UAssaultRifleAttack : public UAttackBase
 public:
 	UAssaultRifleAttack();
 
+	void initializeAttack();
+
 	virtual void executeAttack_Implementation(AMainCharacter* instigatorCharacter) override;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack")

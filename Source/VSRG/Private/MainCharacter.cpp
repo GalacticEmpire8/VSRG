@@ -27,6 +27,14 @@ void AMainCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
+	if (UAttackBase** attackPtr = attackSlots.Find("Q"))
+	{
+		if (*attackPtr)
+		{
+			(*attackPtr)->initializeAttack();
+		}
+	}
+	
 }
 
 void AMainCharacter::Tick(float DeltaTime)
