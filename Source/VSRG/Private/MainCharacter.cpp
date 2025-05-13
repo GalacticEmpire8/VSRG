@@ -27,14 +27,24 @@ void AMainCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
-	if (UAttackBase** attackPtr = attackSlots.Find("Q"))
-	{
-		if (*attackPtr)
-		{
-			(*attackPtr)->initializeAttack();
-		}
-	}
-	
+     // Fix for the error: Replace the usage of GetKeys() with a manual iteration to collect keys.  
+     TArray<FName> keys;  
+     for (const TPair<FName, UAttackBase*>& Pair : attackSlots)  
+     {  
+        keys.Add(Pair.Key);  
+     }  
+
+     // Now you can use the Keys array as needed.  
+     for (const FName& key : keys)  
+     {  
+		 if (UAttackBase** attackPtr = attackSlots.Find(key))
+		 {
+			 if (*attackPtr)
+			 {
+				 (*attackPtr)->initializeAttack();
+			 }
+		 }
+     }
 }
 
 void AMainCharacter::Tick(float DeltaTime)
@@ -151,6 +161,25 @@ void AMainCharacter::EnhancedInputMove(const FInputActionValue& Value)
 void AMainCharacter::OnBeat()
 {
 	hasMovedThisBeat = false;
+
+	// Fix for the error: Replace the usage of GetKeys() with a manual iteration to collect keys.  
+	TArray<FName> keys;
+	for (const TPair<FName, UAttackBase*>& Pair : attackSlots)
+	{
+		keys.Add(Pair.Key);
+	}
+
+	// Now you can use the Keys array as needed.  
+	for (const FName& key : keys)
+	{
+		if (UAttackBase** attackPtr = attackSlots.Find(key))
+		{
+			if (*attackPtr)
+			{
+				(*attackPtr)->onBeat();
+			}
+		}
+	}
 }
 
 void AMainCharacter::UseAttack(FName slot)
@@ -169,7 +198,8 @@ void AMainCharacter::UseAttack(FName slot)
 	{
 		if (*attackPtr)
 		{
-			(*attackPtr)->executeAttack(this);
+			if (!(*attackPtr)->isOnCooldown) (*attackPtr)->executeAttack(this);
+			else UE_LOG(LogTemp, Warning, TEXT("Attack is on cooldown!"));
 		}
 		else UE_LOG(LogTemp, Warning, TEXT("Cant find slot %s"), *slot.ToString());
 	}

@@ -3,10 +3,17 @@
 
 #include "AttackBase.h"
 
-// Default empty implementation
 void UAttackBase::executeAttack_Implementation(AMainCharacter* instigatorCharacter)
 {
+	if (!instigatorCharacter) return;
+	owningCharacter = instigatorCharacter;
 
+	usesLeft--;
+
+	if (usesLeft <= 0) {
+		cooldownLeft = cooldown;
+		isOnCooldown = true;
+	}
 }
 
 void UAttackBase::initializeAttack()
@@ -35,4 +42,17 @@ void UAttackBase::initializeAttack()
 	rangeRow = RangeData.GetRow<FWeaponData>("");
 	if (rangeRow) range = rangeRow->Level1;
 	else range = 1000.f; // Default value if not found
+}
+
+void UAttackBase::onBeat() {
+	if (isOnCooldown) {
+		cooldownLeft--;
+		UE_LOG(LogTemp, Warning, TEXT("Cooldown left: %d"), cooldownLeft);
+	}
+
+	if (cooldownLeft < 0) {
+		cooldownLeft = 0;
+		usesLeft = uses;
+		isOnCooldown = false;
+	}
 }

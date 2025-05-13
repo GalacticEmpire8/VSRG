@@ -27,6 +27,9 @@ public:
 	int32 uses;
 	int32 range;
 	int level;
+	int cooldownLeft;
+	int usesLeft;
+	bool isOnCooldown;
 
 	FWeaponData* damageRow;
 	FWeaponData* cooldownRow;
@@ -35,11 +38,15 @@ public:
 	FWeaponData* usesRow;
 	FWeaponData* rangeRow;
 
+	AMainCharacter* owningCharacter;
+
 	// called when the attack is triggered
 	UFUNCTION(BlueprintNativeEvent, Category = "Attack")
 	void executeAttack(AMainCharacter* instigatorCharacter);
 	
 	void initializeAttack();
+
+	void onBeat();
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack")
 	FDataTableRowHandle DamageData;

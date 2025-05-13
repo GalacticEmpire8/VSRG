@@ -4,25 +4,19 @@
 
 #include "CoreMinimal.h"
 #include "AttackBase.h"
-#include "AssaultRifleAttack.generated.h"
+#include "PistolAttack.generated.h"
 
-/**
- *
- */
-UCLASS(Blueprintable, BlueprintType)
-class VSRG_API UAssaultRifleAttack : public UAttackBase
+UCLASS()
+class VSRG_API UPistolAttack : public UAttackBase
 {
 	GENERATED_BODY()
 
 public:
-	UAssaultRifleAttack();
+	UPistolAttack();
 
 	void initializeAttack();
 
 	virtual void executeAttack_Implementation(AMainCharacter* instigatorCharacter) override;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack")
-	float sprayAngle = 5.f;
 
 private:
 	void FireBurstProjectile();
@@ -31,4 +25,5 @@ private:
 	int32 bulletsFired = 0;
 	int32 maxBullets;
 	float timeBetweenBullets = 0.1f;
+
 };

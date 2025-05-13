@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "AssaultRifleAttack.h"
+#include "SMGAttack.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "DrawDebugHelpers.h"
@@ -9,19 +9,19 @@
 #include <Projectile.h>
 #include <WeaponData.h>
 
-UAssaultRifleAttack::UAssaultRifleAttack()
+USMGAttack::USMGAttack()
 {
 	level = 1;
 	maxBullets = 0;
 	owningCharacter = nullptr;
 }
 
-void UAssaultRifleAttack::initializeAttack()
+void USMGAttack::initializeAttack()
 {
 	Super::initializeAttack();
 }
 
-void UAssaultRifleAttack::executeAttack_Implementation(AMainCharacter* instigatorCharacter)
+void USMGAttack::executeAttack_Implementation(AMainCharacter* instigatorCharacter)
 {
 	Super::executeAttack_Implementation(instigatorCharacter);
 
@@ -29,11 +29,11 @@ void UAssaultRifleAttack::executeAttack_Implementation(AMainCharacter* instigato
 	maxBullets = projectiles;
 	UWorld* world = instigatorCharacter->GetWorld();
 	if (world) {
-		world->GetTimerManager().SetTimer(burstTimerHandle, this, &UAssaultRifleAttack::FireBurstProjectile, timeBetweenBullets, true);
+		world->GetTimerManager().SetTimer(burstTimerHandle, this, &USMGAttack::FireBurstProjectile, timeBetweenBullets, true);
 	}
 }
 
-void UAssaultRifleAttack::FireBurstProjectile()
+void USMGAttack::FireBurstProjectile()
 {
 	UE_LOG(LogTemp, Warning, TEXT("FIRING"))
 
@@ -59,10 +59,9 @@ void UAssaultRifleAttack::FireBurstProjectile()
 		projectile->damage = damage;
 		projectile->SetActorRotation(projectileDirection.Rotation());
 		projectile->projectileComponent->Velocity = projectileDirection * projectile->projectileComponent->InitialSpeed;
-		projectile->SetLifeSpan(0.4f);
+		projectile->SetLifeSpan(0.2f);
 		projectile->SetOwner(owningCharacter);
 	}
 
 	bulletsFired++;
 }
-
