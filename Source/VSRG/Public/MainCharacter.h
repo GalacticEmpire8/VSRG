@@ -36,6 +36,10 @@ private:
 	bool isAttacking;
 	bool hasMovedThisBeat = false;
 
+	float xpToNextLevel;
+	float xp;
+	float level;
+
 	//input functions
 	void Move(FVector axisValue);
 	void OnMoveKeyPressed();
@@ -46,6 +50,8 @@ private:
 	void OnAttackKeyPressed();
 	void OnAttackKeyReleased();
 
+	void CycleWeaponCooldowns();
+
 public:
 	FVector inputDirection;
 
@@ -53,6 +59,7 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* InputComponent) override;
 
 	void OnBeat();
+	void AddXP(float amount);
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Enhanced Input")
 	class UInputMappingContext* inputMappingContext;

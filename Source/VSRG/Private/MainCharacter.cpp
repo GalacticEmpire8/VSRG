@@ -15,6 +15,9 @@ AMainCharacter::AMainCharacter()
 
 	AutoPossessPlayer = EAutoReceiveInput::Player0;
 
+	xp = 0;
+	xpToNextLevel = 5;
+	level = 1;
 }
 
 void AMainCharacter::HandleDestruction()
@@ -135,6 +138,7 @@ void AMainCharacter::EnhancedInputMove(const FInputActionValue& Value)
 			if (moveValue.X > 0.05f || moveValue.X < -0.05f) {
 				FVector moveDirection = FVector(moveValue.X, 0.0f, 0.0f);
 				Move(moveDirection);
+				CycleWeaponCooldowns();
 			}
 
 			if (moveValue.Y > 0.05f || moveValue.Y < -0.05f) {
@@ -161,7 +165,49 @@ void AMainCharacter::EnhancedInputMove(const FInputActionValue& Value)
 void AMainCharacter::OnBeat()
 {
 	hasMovedThisBeat = false;
+}
 
+void AMainCharacter::UseAttack(FName slot)
+{
+	if (hasMovedThisBeat) return;
+
+	if (VSRGGameMode->IsOnBeat()) {
+		if (!isAttacking) {
+			UE_LOG(LogTemp, Warning, TEXT("not using attack"));
+			return;
+		}
+		UE_LOG(LogTemp, Warning, TEXT("using attack"));
+
+		// Check if the attack slot is valid
+		if (UAttackBase** attackPtr = attackSlots.Find(slot))
+		{
+			if (*attackPtr)
+			{
+				if (!(*attackPtr)->isOnCooldown) { 
+					CycleWeaponCooldowns();
+					(*attackPtr)->executeAttack(this); 
+				}
+				else UE_LOG(LogTemp, Warning, TEXT("Attack is on cooldown!"));
+			}
+			else UE_LOG(LogTemp, Warning, TEXT("Cant find slot %s"), *slot.ToString());
+		}
+
+		hasMovedThisBeat = true;
+	}
+}
+
+void AMainCharacter::OnAttackKeyPressed()
+{
+	isAttacking = true;
+	shouldTakeStep = false;
+}
+
+void AMainCharacter::OnAttackKeyReleased()
+{
+	isAttacking = false;
+}
+
+void AMainCharacter::CycleWeaponCooldowns() {
 	// Fix for the error: Replace the usage of GetKeys() with a manual iteration to collect keys.  
 	TArray<FName> keys;
 	for (const TPair<FName, UAttackBase*>& Pair : attackSlots)
@@ -182,39 +228,12 @@ void AMainCharacter::OnBeat()
 	}
 }
 
-void AMainCharacter::UseAttack(FName slot)
-{
-	if (hasMovedThisBeat) return;
-	if (!VSRGGameMode->IsOnBeat()) return;
+void AMainCharacter::AddXP(float amount) {
+	xp += amount;
 
-	if (!isAttacking) {
-		UE_LOG(LogTemp, Warning, TEXT("not using attack"));
-		return;
+	if (xp >= xpToNextLevel) {
+		level++;
+
+		// xpToNextLevel formula here
 	}
-	UE_LOG(LogTemp, Warning, TEXT("using attack"));
-
-	// Check if the attack slot is valid
-	if (UAttackBase** attackPtr = attackSlots.Find(slot))
-	{
-		if (*attackPtr)
-		{
-			if (!(*attackPtr)->isOnCooldown) (*attackPtr)->executeAttack(this);
-			else UE_LOG(LogTemp, Warning, TEXT("Attack is on cooldown!"));
-		}
-		else UE_LOG(LogTemp, Warning, TEXT("Cant find slot %s"), *slot.ToString());
-	}
-
-	hasMovedThisBeat = true;
 }
-
-void AMainCharacter::OnAttackKeyPressed()
-{
-	isAttacking = true;
-	shouldTakeStep = false;
-}
-
-void AMainCharacter::OnAttackKeyReleased()
-{
-	isAttacking = false;
-}
-
