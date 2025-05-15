@@ -47,7 +47,6 @@ void UAttackBase::initializeAttack()
 void UAttackBase::onBeat() {
 	if (isOnCooldown) {
 		cooldownLeft--;
-		UE_LOG(LogTemp, Warning, TEXT("Cooldown left: %d"), cooldownLeft);
 	}
 
 	if (cooldownLeft <= 0) {

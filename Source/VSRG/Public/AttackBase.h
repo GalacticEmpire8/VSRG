@@ -26,10 +26,7 @@ public:
 	int32 pierce;
 	int32 uses;
 	int32 range;
-	int level;
-	int cooldownLeft;
-	int usesLeft;
-	bool isOnCooldown;
+	
 
 	FWeaponData* damageRow;
 	FWeaponData* cooldownRow;
@@ -68,4 +65,16 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<class AProjectile> projectileActor;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Attack")
+	int usesLeft;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Attack")
+	bool isOnCooldown;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Attack")
+	int cooldownLeft;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Attack")
+	int level;
 };

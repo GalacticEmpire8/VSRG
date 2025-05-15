@@ -6,9 +6,6 @@
 #include "AttackBase.h"
 #include "AssaultRifleAttack.generated.h"
 
-/**
- *
- */
 UCLASS(Blueprintable, BlueprintType)
 class VSRG_API UAssaultRifleAttack : public UAttackBase
 {
