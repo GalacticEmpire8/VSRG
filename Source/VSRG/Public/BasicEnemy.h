@@ -31,11 +31,15 @@ public:
 	//Function that handles what the enemy does on the beat
 	void OnBeat();
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "XP Dropped")
+	float xpOnDeath = 1;
+
 private:
 	class AVSRGGameMode* VSRGGameMode;
-
 	class AMainCharacter* Player;
+
 	//Function that handles the movement of the enemy
 	void Move();
+
 
 };

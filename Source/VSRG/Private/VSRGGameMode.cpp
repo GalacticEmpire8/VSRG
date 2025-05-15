@@ -23,6 +23,7 @@ void AVSRGGameMode::ActorDied(AActor* DeadActor)
     else if (ABasicEnemy* DestroyedEnemy = Cast<ABasicEnemy>(DeadActor))
     {
         DestroyedEnemy->HandleDestruction();
+        Player->AddXP(DestroyedEnemy->xpOnDeath);
     }
 }
 

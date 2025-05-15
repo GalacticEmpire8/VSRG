@@ -15,6 +15,9 @@ AMainCharacter::AMainCharacter()
 
 	AutoPossessPlayer = EAutoReceiveInput::Player0;
 
+	xp = 0;
+	xpToNextLevel = 5;
+	level = 1;
 }
 
 void AMainCharacter::HandleDestruction()
@@ -27,6 +30,24 @@ void AMainCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
+     // Fix for the error: Replace the usage of GetKeys() with a manual iteration to collect keys.  
+     TArray<FName> keys;  
+     for (const TPair<FName, UAttackBase*>& Pair : attackSlots)  
+     {  
+        keys.Add(Pair.Key);  
+     }  
+
+     // Now you can use the Keys array as needed.  
+     for (const FName& key : keys)  
+     {  
+		 if (UAttackBase** attackPtr = attackSlots.Find(key))
+		 {
+			 if (*attackPtr)
+			 {
+				 (*attackPtr)->initializeAttack();
+			 }
+		 }
+     }
 }
 
 void AMainCharacter::Tick(float DeltaTime)
@@ -110,12 +131,14 @@ void AMainCharacter::EnhancedInputMove(const FInputActionValue& Value)
 	inputDirection = FVector(moveValue.X, moveValue.Y, 0.0f);
 
 	if (hasMovedThisBeat) return;
+	if (isAttacking) return;
 
 	if (VSRGGameMode->IsOnBeat()) {
-		if (shouldTakeStep && !isAttacking) {
+		if (shouldTakeStep) {
 			if (moveValue.X > 0.05f || moveValue.X < -0.05f) {
 				FVector moveDirection = FVector(moveValue.X, 0.0f, 0.0f);
 				Move(moveDirection);
+				CycleWeaponCooldowns();
 			}
 
 			if (moveValue.Y > 0.05f || moveValue.Y < -0.05f) {
@@ -147,25 +170,30 @@ void AMainCharacter::OnBeat()
 void AMainCharacter::UseAttack(FName slot)
 {
 	if (hasMovedThisBeat) return;
-	if (!VSRGGameMode->IsOnBeat()) return;
 
-	if (!isAttacking) {
-		UE_LOG(LogTemp, Warning, TEXT("not using attack"));
-		return;
-	}
-	UE_LOG(LogTemp, Warning, TEXT("using attack"));
-
-	// Check if the attack slot is valid
-	if (UAttackBase** attackPtr = attackSlots.Find(slot))
-	{
-		if (*attackPtr)
-		{
-			(*attackPtr)->executeAttack(this);
+	if (VSRGGameMode->IsOnBeat()) {
+		if (!isAttacking) {
+			UE_LOG(LogTemp, Warning, TEXT("not using attack"));
+			return;
 		}
-		else UE_LOG(LogTemp, Warning, TEXT("Cant find slot %s"), *slot.ToString());
-	}
+		UE_LOG(LogTemp, Warning, TEXT("using attack"));
 
-	hasMovedThisBeat = true;
+		// Check if the attack slot is valid
+		if (UAttackBase** attackPtr = attackSlots.Find(slot))
+		{
+			if (*attackPtr)
+			{
+				if (!(*attackPtr)->isOnCooldown) { 
+					CycleWeaponCooldowns();
+					(*attackPtr)->executeAttack(this); 
+				}
+				else UE_LOG(LogTemp, Warning, TEXT("Attack is on cooldown!"));
+			}
+			else UE_LOG(LogTemp, Warning, TEXT("Cant find slot %s"), *slot.ToString());
+		}
+
+		hasMovedThisBeat = true;
+	}
 }
 
 void AMainCharacter::OnAttackKeyPressed()
@@ -179,3 +207,33 @@ void AMainCharacter::OnAttackKeyReleased()
 	isAttacking = false;
 }
 
+void AMainCharacter::CycleWeaponCooldowns() {
+	// Fix for the error: Replace the usage of GetKeys() with a manual iteration to collect keys.  
+	TArray<FName> keys;
+	for (const TPair<FName, UAttackBase*>& Pair : attackSlots)
+	{
+		keys.Add(Pair.Key);
+	}
+
+	// Now you can use the Keys array as needed.  
+	for (const FName& key : keys)
+	{
+		if (UAttackBase** attackPtr = attackSlots.Find(key))
+		{
+			if (*attackPtr)
+			{
+				(*attackPtr)->onBeat();
+			}
+		}
+	}
+}
+
+void AMainCharacter::AddXP(float amount) {
+	xp += amount;
+
+	if (xp >= xpToNextLevel) {
+		level++;
+
+		// xpToNextLevel formula here
+	}
+}

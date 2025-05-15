@@ -47,7 +47,7 @@ void AProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimi
 	AController* MyOwnerInstigator = MyOwner->GetInstigatorController();
 	UClass* DamageTypeClass = UDamageType::StaticClass();
 
-	if (OtherActor && OtherActor != this && OtherActor != MyOwner)
+	if (OtherActor && OtherActor != this && OtherActor != MyOwner && !OtherActor->IsA(AProjectile::StaticClass()))
 	{
 		UGameplayStatics::ApplyDamage(OtherActor, damage, MyOwnerInstigator, this, DamageTypeClass);
 	}
