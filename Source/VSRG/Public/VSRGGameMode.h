@@ -19,8 +19,6 @@ private:
 	class ABasicEnemy* BasicEnemy;
 	class AMainCharacter* Player;
 
-	// Beats per Minute
-	float BPM = 80; // I changed the BPM to the song's. Hope this doesn't break anything - Gabriel
 	const float beatTolerance = 0.3;
 
 	// Seconds in a minute
@@ -40,6 +38,10 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = "Audio Track") class USoundBase* audioTrack;
 
 public:
+	// Beats per Minute
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float BPM = 80;
+
 	AVSRGGameMode();
 
 	void ActorDied(AActor* DeadActor);
