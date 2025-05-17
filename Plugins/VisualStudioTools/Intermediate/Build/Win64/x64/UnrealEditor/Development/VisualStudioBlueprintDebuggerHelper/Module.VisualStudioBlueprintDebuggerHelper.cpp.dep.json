@@ -1,0 +1,15 @@
+{
+    "Version": "1.2",
+    "Data": {
+        "Source": "c:\\users\\zacha\\documents\\unreal projects\\vsrg\\vsrg\\plugins\\visualstudiotools\\intermediate\\build\\win64\\x64\\unrealeditor\\development\\visualstudioblueprintdebuggerhelper\\module.visualstudioblueprintdebuggerhelper.cpp",
+        "ProvidedModule": "",
+        "PCH": "c:\\users\\zacha\\documents\\unreal projects\\vsrg\\vsrg\\intermediate\\build\\win64\\x64\\vsrgeditor\\development\\unrealed\\sharedpch.unrealed.project.nonoptimized.valapi.cpp20.inclorderunreal5_3.h.pch",
+        "Includes": [
+            "c:\\users\\zacha\\documents\\unreal projects\\vsrg\\vsrg\\plugins\\visualstudiotools\\intermediate\\build\\win64\\x64\\unrealeditor\\development\\visualstudioblueprintdebuggerhelper\\definitions.visualstudioblueprintdebuggerhelper.h",
+            "c:\\users\\zacha\\documents\\unreal projects\\vsrg\\vsrg\\plugins\\visualstudiotools\\intermediate\\build\\win64\\x64\\unrealeditor\\development\\visualstudioblueprintdebuggerhelper\\permoduleinline.gen.cpp",
+            "c:\\program files\\epic games\\ue_5.5\\engine\\source\\runtime\\core\\public\\hal\\permoduleinline.inl"
+        ],
+        "ImportedModules": [],
+        "ImportedHeaderUnits": []
+    }
+}
