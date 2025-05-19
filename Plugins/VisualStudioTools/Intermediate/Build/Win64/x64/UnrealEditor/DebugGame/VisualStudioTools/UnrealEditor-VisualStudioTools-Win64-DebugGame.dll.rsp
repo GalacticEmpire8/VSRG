@@ -38,6 +38,12 @@
 /NOIMPLIB
 "C:\Users\tyler\Desktop\Uni\GAME201\VSRG\Intermediate\Build\Win64\x64\VSRGEditor\DebugGame\UnrealEd\SharedPCH.UnrealEd.Project.NonOptimized.ValApi.Cpp20.InclOrderUnreal5_3.h.obj"
 "C:\Users\tyler\Desktop\Uni\GAME201\VSRG\Plugins\VisualStudioTools\Intermediate\Build\Win64\x64\UnrealEditor\DebugGame\VisualStudioTools\Module.VisualStudioTools.cpp.obj"
+"C:\Users\tyler\Desktop\Uni\GAME201\VSRG\Plugins\VisualStudioTools\Intermediate\Build\Win64\x64\UnrealEditor\DebugGame\VisualStudioTools\BlueprintReferencesCommandlet.gen.cpp.obj"
+"C:\Users\tyler\Desktop\Uni\GAME201\VSRG\Plugins\VisualStudioTools\Intermediate\Build\Win64\x64\UnrealEditor\DebugGame\VisualStudioTools\VisualStudioTools.init.gen.cpp.obj"
+"C:\Users\tyler\Desktop\Uni\GAME201\VSRG\Plugins\VisualStudioTools\Intermediate\Build\Win64\x64\UnrealEditor\DebugGame\VisualStudioTools\VisualStudioToolsCommandlet.gen.cpp.obj"
+"C:\Users\tyler\Desktop\Uni\GAME201\VSRG\Plugins\VisualStudioTools\Intermediate\Build\Win64\x64\UnrealEditor\DebugGame\VisualStudioTools\VisualStudioToolsCommandletBase.gen.cpp.obj"
+"C:\Users\tyler\Desktop\Uni\GAME201\VSRG\Plugins\VisualStudioTools\Intermediate\Build\Win64\x64\UnrealEditor\DebugGame\VisualStudioTools\VSServerCommandlet.gen.cpp.obj"
+"C:\Users\tyler\Desktop\Uni\GAME201\VSRG\Plugins\VisualStudioTools\Intermediate\Build\Win64\x64\UnrealEditor\DebugGame\VisualStudioTools\VSTestAdapterCommandlet.gen.cpp.obj"
 "C:\Users\tyler\Desktop\Uni\GAME201\VSRG\Plugins\VisualStudioTools\Intermediate\Build\Win64\x64\UnrealEditor\DebugGame\VisualStudioTools\Default.rc2.res"
 "..\Intermediate\Build\Win64\x64\UnrealEditor\Development\ApplicationCore\UnrealEditor-ApplicationCore.lib"
 "..\Intermediate\Build\Win64\x64\UnrealEditor\Development\AssetRegistry\UnrealEditor-AssetRegistry.lib"

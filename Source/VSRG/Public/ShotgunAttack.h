@@ -18,5 +18,5 @@ public:
 
 	virtual void executeAttack_Implementation(AMainCharacter* instigatorCharacter) override;
 
-	float coneHalfAngleDegrees = 30.0f;
+	float coneHalfAngleDegrees = 40.0f;
 };

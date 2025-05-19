@@ -17,8 +17,6 @@ void EmptyLinkFunctionForGeneratedCodeVisualStudioTools_init() {}
 				nullptr,
 				0,
 				PKG_CompiledIn | 0x00000040,
-				0xBEFA2659,
-				0xC15FC782,
 				0xBD467964,
 				0x9DEF401F,
 				METADATA_PARAMS(0, nullptr)
@@ -27,6 +25,5 @@ void EmptyLinkFunctionForGeneratedCodeVisualStudioTools_init() {}
 		}
 		return Z_Registration_Info_UPackage__Script_VisualStudioTools.OuterSingleton;
 	}
-	static FRegisterCompiledInInfo Z_CompiledInDeferPackage_UPackage__Script_VisualStudioTools(Z_Construct_UPackage__Script_VisualStudioTools, TEXT("/Script/VisualStudioTools"), Z_Registration_Info_UPackage__Script_VisualStudioTools, CONSTRUCT_RELOAD_VERSION_INFO(FPackageReloadVersionInfo, 0xBEFA2659, 0xC15FC782));
 	static FRegisterCompiledInInfo Z_CompiledInDeferPackage_UPackage__Script_VisualStudioTools(Z_Construct_UPackage__Script_VisualStudioTools, TEXT("/Script/VisualStudioTools"), Z_Registration_Info_UPackage__Script_VisualStudioTools, CONSTRUCT_RELOAD_VERSION_INFO(FPackageReloadVersionInfo, 0xBD467964, 0x9DEF401F));
 PRAGMA_ENABLE_DEPRECATION_WARNINGS
