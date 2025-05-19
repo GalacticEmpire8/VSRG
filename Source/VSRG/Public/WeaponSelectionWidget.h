@@ -5,7 +5,10 @@
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 #include "AttackBase.h"
+#include <Components/Button.h>
+#include "Components/TextBlock.h"
 #include "WeaponSelectionWidget.generated.h"
+
 
 UCLASS()
 class VSRG_API UWeaponSelectionWidget : public UUserWidget
@@ -13,19 +16,40 @@ class VSRG_API UWeaponSelectionWidget : public UUserWidget
     GENERATED_BODY()
 
 public:
-    // Initializes the widget with the given weapon options
     UFUNCTION(BlueprintCallable)
-    void InitWeaponOptions(const TArray<UAttackBase*>& Options);
+    void InitWeaponOptions(const TArray<TSubclassOf<UAttackBase>>& Options);
 
-    // Called when a weapon is selected
     UFUNCTION(BlueprintCallable)
-    virtual void OnWeaponSelected(UAttackBase* SelectedWeapon);
+    virtual void OnWeaponSelected(TSubclassOf<UAttackBase> SelectedWeaponClass);
 
-    // The weapon options to display
     UPROPERTY(BlueprintReadOnly)
-    TArray<UAttackBase*> WeaponOptions;
+    TArray<TSubclassOf<UAttackBase>> WeaponOptions;
 
-    // The weapon the player selected
     UPROPERTY(BlueprintReadOnly)
-    UAttackBase* SelectedWeapon;
+    TSubclassOf<UAttackBase> SelectedWeaponClass;
+
+    // Button and text references (BindWidget)
+    UPROPERTY(meta = (BindWidget))
+    class UButton* WeaponButton1;
+    UPROPERTY(meta = (BindWidget))
+    class UButton* WeaponButton2;
+    UPROPERTY(meta = (BindWidget))
+    class UButton* WeaponButton3;
+
+    UPROPERTY(meta = (BindWidget))
+    class UTextBlock* WeaponText1;
+    UPROPERTY(meta = (BindWidget))
+    class UTextBlock* WeaponText2;
+    UPROPERTY(meta = (BindWidget))
+    class UTextBlock* WeaponText3;
+
+protected:
+    virtual void NativeConstruct() override;
+
+    UFUNCTION()
+    void HandleWeaponButton1Clicked();
+    UFUNCTION()
+    void HandleWeaponButton2Clicked();
+    UFUNCTION()
+    void HandleWeaponButton3Clicked();
 };

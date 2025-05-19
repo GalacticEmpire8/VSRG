@@ -6,6 +6,7 @@
 #include "PaperCharacter.h"
 #include "VSRGGameMode.h"
 #include "InputAction.h"
+#include "WeaponSelectionWidget.h"
 #include "MainCharacter.generated.h"
 
 
@@ -87,4 +88,18 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attacks")
 	TMap<FName, UAttackBase*> attackSlots;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Upgrade System")
+	UDataTable* WeaponDataTable;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Upgrade System")
+	UWeaponSelectionWidget* WeaponSelectionWidget;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "UI")
+	TSubclassOf<UWeaponSelectionWidget> WeaponSelectionWidgetClass;
+
+	UFUNCTION(BlueprintCallable)
+	void GrantWeapon(TSubclassOf<UAttackBase> WeaponClass);
+
+	UFUNCTION()
+	void Debug_AddXP();
 };

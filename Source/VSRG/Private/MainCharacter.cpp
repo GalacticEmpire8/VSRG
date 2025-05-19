@@ -6,6 +6,7 @@
 #include "InputMappingContext.h"
 #include "Projectile.h"
 #include "AttackBase.h"
+#include "WeaponDataRow.h"
 #include "EnhancedInputSubsystems.h"
 
 AMainCharacter::AMainCharacter()
@@ -99,6 +100,8 @@ void AMainCharacter::SetupPlayerInputComponent(class UInputComponent* InInputCom
 			Subsystem->AddMappingContext(inputMappingContext, 0);
 		}
 	}
+
+	InInputComponent->BindKey(EKeys::P, IE_Pressed, this, &AMainCharacter::Debug_AddXP);
 }
 
 void AMainCharacter::Move(FVector axisValue)
@@ -139,10 +142,10 @@ void AMainCharacter::EnhancedInputMove(const FInputActionValue& Value)
 
 	if (VSRGGameMode->IsOnBeat()) {
 		if (shouldTakeStep) {
+			CycleWeaponCooldowns();
 			if (moveValue.X > 0.05f || moveValue.X < -0.05f) {
 				FVector moveDirection = FVector(moveValue.X, 0.0f, 0.0f);
 				Move(moveDirection);
-				CycleWeaponCooldowns();
 			}
 
 			if (moveValue.Y > 0.05f || moveValue.Y < -0.05f) {
@@ -174,7 +177,6 @@ void AMainCharacter::OnBeat()
 void AMainCharacter::UseAttack(FName slot)
 {
 	if (hasMovedThisBeat) return;
-	if (!moveKeyDown) return;
 
 	if (VSRGGameMode->IsOnBeat()) {
 		if (!isAttacking) {
@@ -234,8 +236,10 @@ void AMainCharacter::CycleWeaponCooldowns() {
 
 void AMainCharacter::AddXP(float amount) {
 	xp += amount;
+	UE_LOG(LogTemp, Warning, TEXT("Debug: Added 10 XP"));
 
 	if (xp >= xpToNextLevel) {
+		UE_LOG(LogTemp, Warning, TEXT("Level Up"));
 		LevelUp();
 	}
 }
@@ -247,4 +251,86 @@ void AMainCharacter::LevelUp() {
 	if (level <= 10) xpToNextLevel += 10;
 	else if (level <= 20) xpToNextLevel += 13;
 	else xpToNextLevel += 16;
+
+	if (!WeaponDataTable) return;
+
+	TArray<FWeaponDataRow*> AllWeapons;
+	static const FString ContextString(TEXT("Weapon Selection"));
+	WeaponDataTable->GetAllRows<FWeaponDataRow>(ContextString, AllWeapons);
+
+	int32 NumChoices = 3;
+	if (AllWeapons.Num() < NumChoices) return;
+
+	// Shuffle
+	for (int32 i = AllWeapons.Num() - 1; i > 0; --i)
+	{
+		int32 j = FMath::RandRange(0, i);
+		AllWeapons.Swap(i, j);
+	}
+
+	// Select first N
+	TArray<TSubclassOf<UAttackBase>> WeaponClasses;
+	for (int32 i = 0; i < NumChoices; ++i)
+	{
+		if (AllWeapons[i]->WeaponClass)
+		{
+			WeaponClasses.Add(AllWeapons[i]->WeaponClass);
+		}
+	}
+
+	if (WeaponSelectionWidgetClass)
+	{
+		WeaponSelectionWidget = CreateWidget<UWeaponSelectionWidget>(GetWorld(), WeaponSelectionWidgetClass);
+		if (WeaponSelectionWidget)
+		{
+			WeaponSelectionWidget->InitWeaponOptions(WeaponClasses);
+			WeaponSelectionWidget->AddToViewport();
+
+			if (APlayerController* PC = Cast<APlayerController>(GetController()))
+			{
+				PC->SetPause(true);
+				FInputModeUIOnly InputMode;
+				InputMode.SetWidgetToFocus(WeaponSelectionWidget->TakeWidget());
+				PC->SetInputMode(InputMode);
+				PC->bShowMouseCursor = true;
+			}
+		}
+	}
+}
+
+void AMainCharacter::GrantWeapon(TSubclassOf<UAttackBase> WeaponClass)
+{
+	if (!WeaponClass) return;
+
+	// Check if the weapon already exists in any slot
+	for (auto& Pair : attackSlots)
+	{
+		if (Pair.Value && Pair.Value->GetClass() == WeaponClass)
+		{
+			Pair.Value->levelUp();
+			UE_LOG(LogTemp, Log, TEXT("Leveled up weapon in slot %s"), *Pair.Key.ToString());
+			return;
+		}
+	}
+
+	// If not found, add to the first available slot
+	UAttackBase* NewWeapon = NewObject<UAttackBase>(this, WeaponClass);
+	if (!NewWeapon) return;
+
+	static const TArray<FName> SlotOrder = { FName("Q"), FName("W"), FName("E"), FName("R") };
+	for (const FName& Slot : SlotOrder)
+	{
+		if (!attackSlots.Contains(Slot) || attackSlots[Slot] == nullptr)
+		{
+			attackSlots.Add(Slot, NewWeapon);
+			NewWeapon->initializeAttack();
+			UE_LOG(LogTemp, Log, TEXT("Granted weapon to slot %s"), *Slot.ToString());
+			return;
+		}
+	}
+}
+
+void AMainCharacter::Debug_AddXP()
+{
+	AddXP(10.0f); // Adds 10 XP, adjust as needed
 }

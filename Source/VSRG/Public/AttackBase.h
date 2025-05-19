@@ -82,4 +82,7 @@ public:
 
 	UPROPERTY(BlueprintReadOnly, Category = "Attack")
 	int level;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Name")
+	FText weaponName;
 };

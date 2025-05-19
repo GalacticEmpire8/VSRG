@@ -105,4 +105,6 @@ void UAttackBase::levelUp() {
 		pierce = pierceRow->Level6;
 		uses = usesRow->Level6;
 	}
+
+	UE_LOG(LogTemp, Warning, TEXT("%s is now level %d"), *weaponName.ToString(), level);
 }
