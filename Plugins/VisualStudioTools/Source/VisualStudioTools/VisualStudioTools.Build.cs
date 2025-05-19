@@ -54,7 +54,6 @@ public class VisualStudioTools : ModuleRules
         PrivateDependencyModuleNames.AddRange(
             new string[]
             {
-                "ApplicationCore",
                 "AssetRegistry",
                 "CoreUObject",
                 "Engine",
@@ -62,15 +61,6 @@ public class VisualStudioTools : ModuleRules
                 "JsonUtilities",
                 "Kismet",
                 "UnrealEd",
-                "Slate",
-                "SlateCore",
-                "ToolMenus",
-                "EditorSubsystem",
-                "MainFrame",
-                "BlueprintGraph",
-                "VisualStudioDTE",
-                "EditorStyle",
-                "Projects"
             }
         );
     }
