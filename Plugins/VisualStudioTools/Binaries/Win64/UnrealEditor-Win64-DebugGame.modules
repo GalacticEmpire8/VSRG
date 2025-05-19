@@ -2,6 +2,7 @@
 	"BuildId": "37670630",
 	"Modules": 
 	{
+		"VisualStudioBlueprintDebuggerHelper": "UnrealEditor-VisualStudioBlueprintDebuggerHelper-Win64-DebugGame.dll",
 		"VisualStudioTools": "UnrealEditor-VisualStudioTools-Win64-DebugGame.dll"
 	}
 }
