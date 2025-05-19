@@ -9,15 +9,10 @@
 #include <Projectile.h>
 #include <WeaponData.h>
 
-UShotgunAttack::UShotgunAttack()
-{
-	level = 1;
-	owningCharacter = nullptr;
-}
-
 void UShotgunAttack::initializeAttack()
 {
 	Super::initializeAttack();
+    coneHalfAngleDegrees = 30.0f;
 }
 
 void UShotgunAttack::executeAttack_Implementation(AMainCharacter* instigatorCharacter)
@@ -31,8 +26,6 @@ void UShotgunAttack::executeAttack_Implementation(AMainCharacter* instigatorChar
     FRotator baseRotation = owningCharacter->inputDirection.Rotation();
     FVector forwardVector = baseRotation.Vector();
 
-    float coneHalfAngleDegrees = 30.0f; // Can be a variable or property
-
     // Uniformly distribute projectiles in the cone
     for (int32 i = 0; i < projectiles; ++i)
     {
@@ -40,7 +33,6 @@ void UShotgunAttack::executeAttack_Implementation(AMainCharacter* instigatorChar
         float fraction = (projectiles == 1) ? 0.5f : (float)i / (projectiles - 1);
         float yaw = FMath::Lerp(-coneHalfAngleDegrees, coneHalfAngleDegrees, fraction);
 
-        // Optionally, you can also spread in pitch for a 2D grid, but here's a 1D horizontal spread:
         FRotator shotRotation = baseRotation;
         shotRotation.Yaw += yaw;
 
@@ -59,4 +51,16 @@ void UShotgunAttack::executeAttack_Implementation(AMainCharacter* instigatorChar
     }
 }
 
+void UShotgunAttack::levelUp() {
+    Super::levelUp();
+
+    switch (level) {
+    case 2:
+        coneHalfAngleDegrees = 30.0f;
+    case 4:
+        coneHalfAngleDegrees = 25.0f;
+    case 6:
+        coneHalfAngleDegrees = 10.0f;
+    }
+}
 

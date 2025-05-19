@@ -7,16 +7,11 @@
 #include <Projectile.h>
 #include <WeaponData.h>
 
-UAssaultRifleAttack::UAssaultRifleAttack()
-{
-	level = 1;
-	maxBullets = 0;
-	owningCharacter = nullptr;
-}
-
 void UAssaultRifleAttack::initializeAttack()
 {
 	Super::initializeAttack();
+
+	maxBullets = 0;
 }
 
 void UAssaultRifleAttack::executeAttack_Implementation(AMainCharacter* instigatorCharacter)

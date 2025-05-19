@@ -20,6 +20,8 @@ class VSRG_API UAttackBase : public UObject
 	GENERATED_BODY()
 
 public:
+	UAttackBase();
+
 	int32 damage;
 	int32 cooldown;
 	int32 projectiles;
@@ -27,6 +29,7 @@ public:
 	int32 uses;
 	int32 range;
 	
+	int rarity;
 
 	FWeaponData* damageRow;
 	FWeaponData* cooldownRow;
@@ -44,6 +47,8 @@ public:
 	void initializeAttack();
 
 	void onBeat();
+
+	void levelUp();
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack")
 	FDataTableRowHandle DamageData;

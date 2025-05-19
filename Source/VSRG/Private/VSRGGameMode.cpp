@@ -5,6 +5,7 @@
 #include "BasicEnemy.h"
 #include "MainCharacter.h"
 #include "Kismet/GameplayStatics.h"
+//#include "Engine/World.h"
 
 AVSRGGameMode::AVSRGGameMode()
 {
@@ -64,7 +65,22 @@ void AVSRGGameMode::OnBeat()
 
     if (BasicEnemy) { BasicEnemy->OnBeat(); }
     if (Player) { Player->OnBeat(); }
+    if (CurrentEnemies < MaxEnemies) { 
+        //AActor* 
+    //    ABasicEnemy* SpawnActor(BasicEnemy);
+    //    CurrentEnemies++;
+    //    UE_LOG(LogTemp, Display, TEXT("Enemy spawned"));
+    //    UE_LOG(LogTemp, Display, TEXT("Current ammount of enemies is %d"),CurrentEnemies);
+        SpawnEnemy();
+    }
 }
+//AActor* SpawnActor
+//(
+  //  UClass* InClass,
+    //FVector const* Location,
+    //FRotator const* Rotation,
+    //const FActorSpawnParameters& SpawnParameters
+//)
 
 void AVSRGGameMode::BeatTimer(float DeltaTime)
 {
@@ -85,3 +101,8 @@ bool AVSRGGameMode::IsOnBeat()
 
     return false;
 }
+
+//void AVSRGGameMode::SpawnEnemy()
+//{
+
+//}

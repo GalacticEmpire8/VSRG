@@ -18,6 +18,8 @@ AMainCharacter::AMainCharacter()
 	xp = 0;
 	xpToNextLevel = 5;
 	level = 1;
+	moveKeyDown = false;
+	hasMovedThisBeat = false;
 }
 
 void AMainCharacter::HandleDestruction()
@@ -118,11 +120,13 @@ void AMainCharacter::Move(FVector axisValue)
 void AMainCharacter::OnMoveKeyPressed()
 {
 	shouldTakeStep = true;
+	moveKeyDown = true;
 }
 
 void AMainCharacter::OnMoveKeyReleased()
 {
 	shouldTakeStep = false;
+	moveKeyDown = false;
 }
 
 void AMainCharacter::EnhancedInputMove(const FInputActionValue& Value)
@@ -170,6 +174,7 @@ void AMainCharacter::OnBeat()
 void AMainCharacter::UseAttack(FName slot)
 {
 	if (hasMovedThisBeat) return;
+	if (!moveKeyDown) return;
 
 	if (VSRGGameMode->IsOnBeat()) {
 		if (!isAttacking) {
@@ -208,7 +213,6 @@ void AMainCharacter::OnAttackKeyReleased()
 }
 
 void AMainCharacter::CycleWeaponCooldowns() {
-	// Fix for the error: Replace the usage of GetKeys() with a manual iteration to collect keys.  
 	TArray<FName> keys;
 	for (const TPair<FName, UAttackBase*>& Pair : attackSlots)
 	{
@@ -232,8 +236,15 @@ void AMainCharacter::AddXP(float amount) {
 	xp += amount;
 
 	if (xp >= xpToNextLevel) {
-		level++;
-
-		// xpToNextLevel formula here
+		LevelUp();
 	}
+}
+
+void AMainCharacter::LevelUp() {
+	level++;
+	xp = 0;
+
+	if (level <= 10) xpToNextLevel += 10;
+	else if (level <= 20) xpToNextLevel += 13;
+	else xpToNextLevel += 16;
 }

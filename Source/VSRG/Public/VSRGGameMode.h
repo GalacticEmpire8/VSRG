@@ -29,18 +29,35 @@ private:
 	//Time between beats
 	float TimeBetweenLastBeat;
 
+	//Current ammount of enemies
+	int CurrentEnemies = 0;
+
+	//Max ammount of enemies
+	int MaxEnemies = 5;
+
 	//When beat should be called
 	void BeatTimer(float DeltaTime);
 
 	//TODO:Function that handles the start of the game
-	//TODO:Function that prompts things that act on the beat
+	//Function that prompts things that act on the beat
 	void OnBeat();
-	//TODO:Fucntion that handles actor death
+
+	//Funtion that handles spawning enemies
+	//void SpawnEnemy();
+
+
+	//Spawn information
+	//FVector SpawnLocation = FVector(0.0f, 0.0f, 0.0f);
+	//FRotator SpawnRotation = FRotator(0.0f, 0.0f, 0.0f);
+	//FActorSpawnParameters SpawnInfo;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Audio Track") class USoundBase* audioTrack;
 
 public:
 	AVSRGGameMode();
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void SpawnEnemy();
 
 	void ActorDied(AActor* DeadActor);
 

@@ -6,15 +6,17 @@
 #include "AttackBase.h"
 #include "ShotgunAttack.generated.h"
 
-UCLASS()
+UCLASS(Blueprintable, BlueprintType)
 class VSRG_API UShotgunAttack : public UAttackBase
 {
 	GENERATED_BODY()
 
 public:
-	UShotgunAttack();
-
 	void initializeAttack();
 
+	void levelUp();
+
 	virtual void executeAttack_Implementation(AMainCharacter* instigatorCharacter) override;
+
+	float coneHalfAngleDegrees = 40.0f;
 };
