@@ -39,7 +39,7 @@ private:
 	class AMainCharacter* Player;
 
 	UPROPERTY(EditAnywhere);
-	float EnemyDamage = 50;
+	float EnemyDamage = 5;
 
 	//Function that handles the movement of the enemy
 	void Move();

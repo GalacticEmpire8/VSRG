@@ -1,11 +1,11 @@
 {
     "Version": "1.2",
     "Data": {
-        "Source": "c:\\users\\zacha\\documents\\unrealprojects\\vsrg\\vsrg\\plugins\\visualstudiotools\\intermediate\\build\\win64\\unrealeditor\\inc\\visualstudiotools\\uht\\visualstudiotools.init.gen.cpp",
+        "Source": "h:\\unreal projects\\vsrg\\vsrg\\plugins\\visualstudiotools\\intermediate\\build\\win64\\unrealeditor\\inc\\visualstudiotools\\uht\\visualstudiotools.init.gen.cpp",
         "ProvidedModule": "",
-        "PCH": "c:\\users\\zacha\\documents\\unrealprojects\\vsrg\\vsrg\\intermediate\\build\\win64\\x64\\vsrgeditor\\development\\unrealed\\sharedpch.unrealed.project.valapi.cpp20.inclorderunreal5_3.h.pch",
+        "PCH": "h:\\unreal projects\\vsrg\\vsrg\\intermediate\\build\\win64\\x64\\vsrgeditor\\development\\unrealed\\sharedpch.unrealed.project.valapi.cpp20.inclorderunreal5_3.h.pch",
         "Includes": [
-            "c:\\users\\zacha\\documents\\unrealprojects\\vsrg\\vsrg\\plugins\\visualstudiotools\\intermediate\\build\\win64\\x64\\unrealeditor\\development\\visualstudiotools\\definitions.visualstudiotools.h"
+            "h:\\unreal projects\\vsrg\\vsrg\\plugins\\visualstudiotools\\intermediate\\build\\win64\\x64\\unrealeditor\\development\\visualstudiotools\\definitions.visualstudiotools.h"
         ],
         "ImportedModules": [],
         "ImportedHeaderUnits": []
