@@ -192,7 +192,7 @@ void AMainCharacter::UseAttack(FName slot)
 			else UE_LOG(LogTemp, Warning, TEXT("Cant find slot %s"), *slot.ToString());
 		}
 
-		hasMovedThisBeat = true;
+		hasMovedThisBeat = trueis
 	}
 }
 
