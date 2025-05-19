@@ -34,11 +34,12 @@ private:
 	bool shouldTakeStep;
 	bool onBeat;
 	bool isAttacking;
-	bool hasMovedThisBeat = false;
+	bool hasMovedThisBeat;
+	bool moveKeyDown;
 
 	float xpToNextLevel;
 	float xp;
-	float level;
+	int level;
 
 	//input functions
 	void Move(FVector axisValue);
@@ -51,6 +52,7 @@ private:
 	void OnAttackKeyReleased();
 
 	void CycleWeaponCooldowns();
+	void LevelUp();
 
 public:
 	FVector inputDirection;

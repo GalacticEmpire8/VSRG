@@ -12,8 +12,6 @@ class VSRG_API UAssaultRifleAttack : public UAttackBase
 	GENERATED_BODY()
 
 public:
-	UAssaultRifleAttack();
-
 	void initializeAttack();
 
 	virtual void executeAttack_Implementation(AMainCharacter* instigatorCharacter) override;
