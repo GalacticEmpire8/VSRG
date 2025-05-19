@@ -38,8 +38,11 @@ private:
 	class AVSRGGameMode* VSRGGameMode;
 	class AMainCharacter* Player;
 
+	UPROPERTY(EditAnywhere);
+	float EnemyDamage = 50;
+
 	//Function that handles the movement of the enemy
 	void Move();
 
-
+	void EnemyAttack();
 };

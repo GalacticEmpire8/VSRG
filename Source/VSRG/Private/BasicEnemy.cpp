@@ -61,6 +61,7 @@ void ABasicEnemy::Move()
 	//}
 
 	int EnemyStep = 32; // Distance the enemy moves 
+	const float AttackRange = 32.0f;
 
 	Player = Cast<AMainCharacter>(UGameplayStatics::GetActorOfClass(this, AMainCharacter::StaticClass()));
 	if (Player) {
@@ -68,7 +69,12 @@ void ABasicEnemy::Move()
 		FVector EnemyLocation = GetActorLocation();
 		UE_LOG(LogTemp, Warning, TEXT("Player location is %s"), *PlayerLocation.ToString());
 		UE_LOG(LogTemp, Warning, TEXT("Enemy location is %s"), *EnemyLocation.ToString());
-		if ((abs(PlayerLocation.X - EnemyLocation.X) == abs(PlayerLocation.Y - EnemyLocation.Y)))
+		if (FVector::Dist2D(PlayerLocation, EnemyLocation) <= AttackRange)
+		{
+			UE_LOG(LogTemp, Display, TEXT("Enemy is near the player "));
+			EnemyAttack();
+		}
+		else if ((abs(PlayerLocation.X - EnemyLocation.X) == abs(PlayerLocation.Y - EnemyLocation.Y)))
 		{
 			if (abs(PlayerLocation.X > EnemyLocation.X) && abs(PlayerLocation.Y > EnemyLocation.Y)) {
 				SetActorLocation(FVector(EnemyLocation.X + EnemyStep, EnemyLocation.Y + EnemyStep, EnemyLocation.Z));
@@ -101,7 +107,20 @@ void ABasicEnemy::Move()
 			}
 		}
 		else {
-			UE_LOG(LogTemp, Warning, TEXT("Player and enemy are in the same location"));
+			UE_LOG(LogTemp, Display, TEXT("Player and enemy are in the same location"));
 		}
 	}
+}
+
+void ABasicEnemy::EnemyAttack() 
+{
+	AActor* MyOwner = GetOwner();
+	AController* MyOwnerInstigator = nullptr;
+	if (MyOwner)
+	{
+		MyOwnerInstigator = MyOwner->GetInstigatorController();
+	}
+	UClass* DamageTypeClass = UDamageType::StaticClass();
+	UGameplayStatics::ApplyDamage(Player, EnemyDamage, MyOwnerInstigator, this, DamageTypeClass);
+
 }

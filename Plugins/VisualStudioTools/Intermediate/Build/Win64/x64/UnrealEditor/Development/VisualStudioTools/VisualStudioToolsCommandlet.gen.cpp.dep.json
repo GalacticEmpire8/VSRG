@@ -1,0 +1,19 @@
+{
+    "Version": "1.2",
+    "Data": {
+        "Source": "c:\\users\\zacha\\documents\\unrealprojects\\vsrg\\vsrg\\plugins\\visualstudiotools\\intermediate\\build\\win64\\unrealeditor\\inc\\visualstudiotools\\uht\\visualstudiotoolscommandlet.gen.cpp",
+        "ProvidedModule": "",
+        "PCH": "c:\\users\\zacha\\documents\\unrealprojects\\vsrg\\vsrg\\intermediate\\build\\win64\\x64\\vsrgeditor\\development\\unrealed\\sharedpch.unrealed.project.valapi.cpp20.inclorderunreal5_3.h.pch",
+        "Includes": [
+            "c:\\users\\zacha\\documents\\unrealprojects\\vsrg\\vsrg\\plugins\\visualstudiotools\\intermediate\\build\\win64\\x64\\unrealeditor\\development\\visualstudiotools\\definitions.visualstudiotools.h",
+            "c:\\users\\zacha\\documents\\unrealprojects\\vsrg\\vsrg\\plugins\\visualstudiotools\\source\\visualstudiotools\\private\\visualstudiotoolscommandlet.h",
+            "c:\\users\\zacha\\documents\\unrealprojects\\vsrg\\vsrg\\plugins\\visualstudiotools\\source\\visualstudiotools\\private\\visualstudiotoolscommandletbase.h",
+            "c:\\program files\\epic games\\ue_5.5\\engine\\source\\runtime\\engine\\classes\\commandlets\\commandlet.h",
+            "c:\\program files\\epic games\\ue_5.5\\engine\\intermediate\\build\\win64\\unrealeditor\\inc\\engine\\uht\\commandlet.generated.h",
+            "c:\\users\\zacha\\documents\\unrealprojects\\vsrg\\vsrg\\plugins\\visualstudiotools\\intermediate\\build\\win64\\unrealeditor\\inc\\visualstudiotools\\uht\\visualstudiotoolscommandletbase.generated.h",
+            "c:\\users\\zacha\\documents\\unrealprojects\\vsrg\\vsrg\\plugins\\visualstudiotools\\intermediate\\build\\win64\\unrealeditor\\inc\\visualstudiotools\\uht\\visualstudiotoolscommandlet.generated.h"
+        ],
+        "ImportedModules": [],
+        "ImportedHeaderUnits": []
+    }
+}

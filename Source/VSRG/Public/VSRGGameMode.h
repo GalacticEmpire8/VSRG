@@ -29,8 +29,7 @@ private:
 	//Time between beats
 	float TimeBetweenLastBeat;
 
-	//Current ammount of enemies
-	int CurrentEnemies = 0;
+	
 
 	//Max ammount of enemies
 	int MaxEnemies = 5;
@@ -56,8 +55,14 @@ private:
 public:
 	AVSRGGameMode();
 
+	//Current ammount of enemies
+	int CurrentEnemies = 0;
+
 	UFUNCTION(BlueprintImplementableEvent)
 	void SpawnEnemy();
+
+	UFUNCTION(BlueprintCallable, Category = "PlayerInfo")
+	FVector ActorLocation();
 
 	void ActorDied(AActor* DeadActor);
 
