@@ -161,11 +161,13 @@ void AMainCharacter::EnhancedInputMove(const FInputActionValue& Value)
 	if (VSRGGameMode && VSRGGameMode->IsOnBeat())
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Input is on the beat!"));
+		inputOnBeat = true;
 	}
 
 	else
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Input is off the beat."));
+		inputOnBeat = false;
 	}
 }
 

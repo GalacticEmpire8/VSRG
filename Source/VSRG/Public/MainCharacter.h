@@ -33,14 +33,10 @@ private:
 	class AVSRGGameMode* VSRGGameMode;
 
 	bool shouldTakeStep;
-	bool onBeat;
 	bool isAttacking;
-	bool hasMovedThisBeat;
+	bool onBeat;
 	bool moveKeyDown;
 
-	float xpToNextLevel;
-	float xp;
-	int level;
 
 	//input functions
 	void Move(FVector axisValue);
@@ -63,6 +59,12 @@ public:
 
 	void OnBeat();
 	void AddXP(float amount);
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "On Beat")
+	bool hasMovedThisBeat;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "On Beat") // Checking if input is on beat
+	bool inputOnBeat;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Enhanced Input")
 	class UInputMappingContext* inputMappingContext;
@@ -102,4 +104,13 @@ public:
 
 	UFUNCTION()
 	void Debug_AddXP();
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "XP")
+	float xpToNextLevel;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "XP")
+	float xp;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "XP")
+	int level;
 };
