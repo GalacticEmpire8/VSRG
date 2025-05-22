@@ -74,36 +74,44 @@ void UAttackBase::levelUp() {
 		projectiles = projectileRow->Level1;
 		pierce = pierceRow->Level1;
 		uses = usesRow->Level1;
+		UE_LOG(LogTemp, Warning, TEXT("damage is now %d"), damageRow->Level1);
+		break;
 	case 2:
 		damage = damageRow->Level2;
 		cooldown = cooldownRow->Level2;
 		projectiles = projectileRow->Level2;
 		pierce = pierceRow->Level2;
 		uses = usesRow->Level2;
+		UE_LOG(LogTemp, Warning, TEXT("damage is now %d"), damageRow->Level2);
+		break;
 	case 3:
 		damage = damageRow->Level3;
 		cooldown = cooldownRow->Level3;
 		projectiles = projectileRow->Level3;
 		pierce = pierceRow->Level3;
 		uses = usesRow->Level3;
+		break;
 	case 4:
 		damage = damageRow->Level4;
 		cooldown = cooldownRow->Level4;
 		projectiles = projectileRow->Level4;
 		pierce = pierceRow->Level4;
 		uses = usesRow->Level4;
+		break;
 	case 5:
 		damage = damageRow->Level5;
 		cooldown = cooldownRow->Level5;
 		projectiles = projectileRow->Level5;
 		pierce = pierceRow->Level5;
 		uses = usesRow->Level5;
+		break;
 	case 6:
 		damage = damageRow->Level6;
 		cooldown = cooldownRow->Level6;
 		projectiles = projectileRow->Level6;
 		pierce = pierceRow->Level6;
 		uses = usesRow->Level6;
+		break;
 	}
 
 	UE_LOG(LogTemp, Warning, TEXT("%s is now level %d"), *weaponName.ToString(), level);

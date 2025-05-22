@@ -27,6 +27,7 @@ void UPistolAttack::executeAttack_Implementation(AMainCharacter* instigatorChara
 
 	bulletsFired = 0;
 	maxBullets = projectiles;
+	UE_LOG(LogTemp, Warning, TEXT("projectiles is now %d"), projectiles);
 	UWorld* world = instigatorCharacter->GetWorld();
 	if (world) {
 		world->GetTimerManager().SetTimer(burstTimerHandle, this, &UPistolAttack::FireBurstProjectile, timeBetweenBullets, true);
