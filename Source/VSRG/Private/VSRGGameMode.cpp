@@ -25,6 +25,7 @@ void AVSRGGameMode::ActorDied(AActor* DeadActor)
     {
         DestroyedEnemy->HandleDestruction();
         Player->AddXP(DestroyedEnemy->xpOnDeath);
+        CurrentEnemies -= 1;
     }
 }
 
@@ -63,15 +64,28 @@ void AVSRGGameMode::OnBeat()
     BasicEnemy = Cast<ABasicEnemy>(UGameplayStatics::GetActorOfClass(this, ABasicEnemy::StaticClass()));
     UE_LOG(LogTemp, Warning, TEXT("BEAT"));
 
-    if (BasicEnemy) { BasicEnemy->OnBeat(); }
+    if (BasicEnemy) 
+    { 
+        TArray<AActor*> FoundEnemies;
+        UGameplayStatics::GetAllActorsOfClass(GetWorld(), ABasicEnemy::StaticClass(), FoundEnemies);
+
+        for (AActor* Actor : FoundEnemies)
+        {
+            ABasicEnemy* Enemy = Cast<ABasicEnemy>(Actor);
+            if (Enemy)
+            {
+                Enemy->OnBeat();
+            }
+        }
+    }
     if (Player) { Player->OnBeat(); }
     if (CurrentEnemies < MaxEnemies) { 
         //AActor* 
     //    ABasicEnemy* SpawnActor(BasicEnemy);
-    //    CurrentEnemies++;
     //    UE_LOG(LogTemp, Display, TEXT("Enemy spawned"));
     //    UE_LOG(LogTemp, Display, TEXT("Current ammount of enemies is %d"),CurrentEnemies);
         SpawnEnemy();
+        CurrentEnemies++;
     }
 }
 //AActor* SpawnActor
@@ -102,7 +116,10 @@ bool AVSRGGameMode::IsOnBeat()
     return false;
 }
 
-//void AVSRGGameMode::SpawnEnemy()
-//{
+//void AVSRGGameMode::SpawnEnemy(){}
 
-//}
+FVector AVSRGGameMode::ActorLocation()
+{
+    //(*Player).GetActorLocation();
+    return Player->GetActorLocation();
+}
