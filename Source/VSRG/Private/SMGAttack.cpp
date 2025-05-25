@@ -21,9 +21,9 @@ void USMGAttack::initializeAttack()
 	Super::initializeAttack();
 }
 
-void USMGAttack::executeAttack_Implementation(AMainCharacter* instigatorCharacter)
+void USMGAttack::ExecuteAttack_Implementation(AMainCharacter* instigatorCharacter, FVector dir)
 {
-	Super::executeAttack_Implementation(instigatorCharacter);
+	Super::ExecuteAttack_Implementation(instigatorCharacter, dir);
 
 	bulletsFired = 0;
 	maxBullets = projectiles;
@@ -45,15 +45,15 @@ void USMGAttack::FireBurstProjectile()
 
 	// Get spawn location and direction
 	FVector spawnLocation = owningCharacter->GetActorLocation();
-	FRotator spawnRotation = owningCharacter->inputDirection.Rotation();
-	FVector forwardVector = spawnRotation.Vector();
+	FVector forwardVector = baseRotation.Vector();
+
 	float spreadAngle = FMath::DegreesToRadians(sprayAngle);
 	float randomAngle = FMath::FRandRange(-spreadAngle, spreadAngle);
 	FQuat randomRotation = FQuat(FVector::UpVector, randomAngle);
 	FVector projectileDirection = randomRotation.RotateVector(forwardVector);
 
 	// Spawn projectile
-	AProjectile* projectile = GetWorld()->SpawnActor<AProjectile>(projectileActor, spawnLocation, spawnRotation);
+	AProjectile* projectile = GetWorld()->SpawnActor<AProjectile>(projectileActor, spawnLocation, baseRotation);
 	if (projectile)
 	{
 		projectile->damage = damage;

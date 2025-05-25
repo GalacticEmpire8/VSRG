@@ -19,6 +19,10 @@ class VSRG_API UAttackBase : public UObject
 {
 	GENERATED_BODY()
 
+protected:
+	FVector inputDirection;
+	FRotator baseRotation;
+
 public:
 	UAttackBase();
 
@@ -42,7 +46,8 @@ public:
 
 	// called when the attack is triggered
 	UFUNCTION(BlueprintNativeEvent, Category = "Attack")
-	void executeAttack(AMainCharacter* instigatorCharacter);
+	void ExecuteAttack(AMainCharacter* instigatorCharacter, FVector dir);
+	virtual void ExecuteAttack_Implementation(AMainCharacter* instigatorCharacter, FVector dir);
 	
 	void initializeAttack();
 
