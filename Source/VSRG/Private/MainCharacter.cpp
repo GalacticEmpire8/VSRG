@@ -202,6 +202,7 @@ void AMainCharacter::UseAttack(FName slot)
 		}
 
 		hasMovedThisBeat = true;
+		isAttacking = false;
 	}
 }
 
@@ -263,33 +264,46 @@ void AMainCharacter::LevelUp() {
 	int32 NumChoices = 3;
 	if (AllWeapons.Num() < NumChoices) return;
 
-	// Shuffle
-	for (int32 i = AllWeapons.Num() - 1; i > 0; --i)
-	{
-		int32 j = FMath::RandRange(0, i);
-		AllWeapons.Swap(i, j);
-	}
-
-	// Select first N
-	TArray<TSubclassOf<UAttackBase>> WeaponClasses;
-	for (int32 i = 0; i < NumChoices; ++i)
-	{
-		if (AllWeapons[i]->WeaponClass)
-		{
-			WeaponClasses.Add(AllWeapons[i]->WeaponClass);
+	// Build a set of weapon classes the player owns at level 6
+	TSet<UClass*> MaxedWeaponClasses;
+	for (const TPair<FName, UAttackBase*>& Pair : attackSlots) {
+		if (Pair.Value && Pair.Value->level >= 6) {
+			MaxedWeaponClasses.Add(Pair.Value->GetClass());
 		}
 	}
 
-	if (WeaponSelectionWidgetClass)
-	{
+	// Filter out weapons the player owns at level 6
+	TArray<FWeaponDataRow*> AvailableWeapons;
+	for (FWeaponDataRow* WeaponRow : AllWeapons) {
+		if (WeaponRow && WeaponRow->WeaponClass) {
+			if (!MaxedWeaponClasses.Contains(WeaponRow->WeaponClass)) {
+				AvailableWeapons.Add(WeaponRow);
+			}
+		}
+	}
+
+	if (AvailableWeapons.Num() < NumChoices) return;
+
+	// Shuffle
+	for (int32 i = AvailableWeapons.Num() - 1; i > 0; --i) {
+		int32 j = FMath::RandRange(0, i);
+		AvailableWeapons.Swap(i, j);
+	}
+
+	TArray<TSubclassOf<UAttackBase>> WeaponClasses;
+	for (int32 i = 0; i < NumChoices; ++i) {
+		if (AvailableWeapons[i]->WeaponClass) {
+			WeaponClasses.Add(AvailableWeapons[i]->WeaponClass);
+		}
+	}
+
+	if (WeaponSelectionWidgetClass) {
 		WeaponSelectionWidget = CreateWidget<UWeaponSelectionWidget>(GetWorld(), WeaponSelectionWidgetClass);
-		if (WeaponSelectionWidget)
-		{
+		if (WeaponSelectionWidget) {
 			WeaponSelectionWidget->InitWeaponOptions(WeaponClasses);
 			WeaponSelectionWidget->AddToViewport();
 
-			if (APlayerController* PC = Cast<APlayerController>(GetController()))
-			{
+			if (APlayerController* PC = Cast<APlayerController>(GetController())) {
 				PC->SetPause(true);
 				FInputModeUIOnly InputMode;
 				InputMode.SetWidgetToFocus(WeaponSelectionWidget->TakeWidget());
