@@ -44,15 +44,17 @@ private:
 	void OnMoveKeyReleased();
 	void EnhancedInputMove(const FInputActionValue& Value);
 
-	void UseAttack(FName slot);
+	void UseAttack(const FInputActionValue& Value);
 	void OnAttackKeyPressed();
 	void OnAttackKeyReleased();
 
 	void CycleWeaponCooldowns();
+	void EquipWeapon(int32 slot);
 	void LevelUp();
 
 public:
 	FVector inputDirection;
+	UAttackBase* equippedWeapon;
 
 	virtual void Tick(float DeltaSeconds) override;
 	virtual void SetupPlayerInputComponent(class UInputComponent* InputComponent) override;
@@ -76,28 +78,28 @@ public:
 	UInputAction* inputToAttack;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Enhanced Input")
-	UInputAction* QAttack;
+	UInputAction* slot1;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Enhanced Input")
-	UInputAction* WAttack;
+	UInputAction* slot2;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Enhanced Input")
-	UInputAction* EAttack;
+	UInputAction* slot3;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Enhanced Input")
-	UInputAction* RAttack;
+	UInputAction* slot4;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attacks")
-	TMap<FName, UAttackBase*> attackSlots;
+	TMap<int32, UAttackBase*> attackSlots;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Upgrade System")
-	UDataTable* WeaponDataTable;
+	UDataTable* weaponDataTable;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Upgrade System")
-	UWeaponSelectionWidget* WeaponSelectionWidget;
+	UWeaponSelectionWidget* weaponSelectionWidget;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "UI")
-	TSubclassOf<UWeaponSelectionWidget> WeaponSelectionWidgetClass;
+	TSubclassOf<UWeaponSelectionWidget> weaponSelectionWidgetClass;
 
 	UFUNCTION(BlueprintCallable)
 	void GrantWeapon(TSubclassOf<UAttackBase> WeaponClass);

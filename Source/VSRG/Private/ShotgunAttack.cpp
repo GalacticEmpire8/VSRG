@@ -15,15 +15,14 @@ void UShotgunAttack::initializeAttack()
     coneHalfAngleDegrees = 30.0f;
 }
 
-void UShotgunAttack::executeAttack_Implementation(AMainCharacter* instigatorCharacter)
+void UShotgunAttack::ExecuteAttack_Implementation(AMainCharacter* instigatorCharacter, FVector dir)
 {
-    Super::executeAttack_Implementation(instigatorCharacter);
+    Super::ExecuteAttack_Implementation(instigatorCharacter, dir);
 
     UWorld* world = instigatorCharacter->GetWorld();
     if (!world) return;
 
     FVector spawnLocation = owningCharacter->GetActorLocation();
-    FRotator baseRotation = owningCharacter->inputDirection.Rotation();
     FVector forwardVector = baseRotation.Vector();
 
     // Uniformly distribute projectiles in the cone

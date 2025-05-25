@@ -34,20 +34,21 @@ void AMainCharacter::BeginPlay()
 	Super::BeginPlay();
 
      // Fix for the error: Replace the usage of GetKeys() with a manual iteration to collect keys.  
-     TArray<FName> keys;  
-     for (const TPair<FName, UAttackBase*>& Pair : attackSlots)  
+     TArray<int32> keys;  
+     for (const TPair<int32, UAttackBase*>& Pair : attackSlots)  
      {  
         keys.Add(Pair.Key);  
      }  
 
      // Now you can use the Keys array as needed.  
-     for (const FName& key : keys)  
+     for (const int32& key : keys)  
      {  
 		 if (UAttackBase** attackPtr = attackSlots.Find(key))
 		 {
 			 if (*attackPtr)
 			 {
-				 (*attackPtr)->initializeAttack();
+				 equippedWeapon = *attackPtr;
+				 equippedWeapon->initializeAttack();
 			 }
 		 }
      }
@@ -74,21 +75,15 @@ void AMainCharacter::SetupPlayerInputComponent(class UInputComponent* InInputCom
 		enhancedInputComponent->BindAction(inputToMove, ETriggerEvent::Triggered, this, &AMainCharacter::EnhancedInputMove);
 		enhancedInputComponent->BindAction(inputToMove, ETriggerEvent::Completed, this, &AMainCharacter::OnMoveKeyReleased);
 
-		enhancedInputComponent->BindAction(QAttack, ETriggerEvent::Started, this, &AMainCharacter::OnAttackKeyPressed);
-		enhancedInputComponent->BindAction(QAttack, ETriggerEvent::Triggered, this, &AMainCharacter::UseAttack, FName("Q"));
-		enhancedInputComponent->BindAction(QAttack, ETriggerEvent::Completed, this, &AMainCharacter::OnAttackKeyReleased);
+		enhancedInputComponent->BindAction(inputToAttack, ETriggerEvent::Started, this, &AMainCharacter::OnAttackKeyPressed);
+		enhancedInputComponent->BindAction(inputToAttack, ETriggerEvent::Triggered, this, &AMainCharacter::OnAttackKeyPressed);
+		enhancedInputComponent->BindAction(inputToAttack, ETriggerEvent::Completed, this, &AMainCharacter::OnAttackKeyReleased);
 
-		enhancedInputComponent->BindAction(WAttack, ETriggerEvent::Started, this, &AMainCharacter::OnAttackKeyPressed);
-		enhancedInputComponent->BindAction(WAttack, ETriggerEvent::Triggered, this, &AMainCharacter::UseAttack, FName("W"));
-		enhancedInputComponent->BindAction(WAttack, ETriggerEvent::Completed, this, &AMainCharacter::OnAttackKeyReleased);
+		enhancedInputComponent->BindAction(slot1, ETriggerEvent::Triggered, this, &AMainCharacter::EquipWeapon, int32(1));
+		enhancedInputComponent->BindAction(slot2, ETriggerEvent::Triggered, this, &AMainCharacter::EquipWeapon, int32(2));
+		enhancedInputComponent->BindAction(slot3, ETriggerEvent::Triggered, this, &AMainCharacter::EquipWeapon, int32(3));
+		enhancedInputComponent->BindAction(slot4, ETriggerEvent::Triggered, this, &AMainCharacter::EquipWeapon, int32(4));
 
-		enhancedInputComponent->BindAction(EAttack, ETriggerEvent::Started, this, &AMainCharacter::OnAttackKeyPressed);
-		enhancedInputComponent->BindAction(EAttack, ETriggerEvent::Triggered, this, &AMainCharacter::UseAttack, FName("E"));
-		enhancedInputComponent->BindAction(EAttack, ETriggerEvent::Completed, this, &AMainCharacter::OnAttackKeyReleased);
-
-		enhancedInputComponent->BindAction(RAttack, ETriggerEvent::Started, this, &AMainCharacter::OnAttackKeyPressed);
-		enhancedInputComponent->BindAction(RAttack, ETriggerEvent::Triggered, this, &AMainCharacter::UseAttack, FName("R"));
-		enhancedInputComponent->BindAction(RAttack, ETriggerEvent::Completed, this, &AMainCharacter::OnAttackKeyReleased);
 		UE_LOG(LogTemp, Warning, TEXT("Movement Setup"));
 	}
 
@@ -176,33 +171,36 @@ void AMainCharacter::OnBeat()
 	hasMovedThisBeat = false;
 }
 
-void AMainCharacter::UseAttack(FName slot)
+void AMainCharacter::UseAttack(const FInputActionValue& Value)
 {
 	if (hasMovedThisBeat) return;
 
-	if (VSRGGameMode->IsOnBeat()) {
-		if (!isAttacking) {
-			UE_LOG(LogTemp, Warning, TEXT("not using attack"));
-			return;
-		}
-		UE_LOG(LogTemp, Warning, TEXT("using attack"));
+	FVector2D dirValue = Value.Get<FVector2D>();
+	inputDirection = FVector(dirValue.X, dirValue.Y, 0.0f);
 
-		// Check if the attack slot is valid
-		if (UAttackBase** attackPtr = attackSlots.Find(slot))
+	if (VSRGGameMode->IsOnBeat()) {
+		if (equippedWeapon)
 		{
-			if (*attackPtr)
-			{
-				if (!(*attackPtr)->isOnCooldown) { 
-					CycleWeaponCooldowns();
-					(*attackPtr)->executeAttack(this); 
-				}
-				else UE_LOG(LogTemp, Warning, TEXT("Attack is on cooldown!"));
+			if (!equippedWeapon->isOnCooldown) { 
+				CycleWeaponCooldowns();
+				equippedWeapon->ExecuteAttack(this, inputDirection); 
 			}
-			else UE_LOG(LogTemp, Warning, TEXT("Cant find slot %s"), *slot.ToString());
+			else UE_LOG(LogTemp, Warning, TEXT("Attack is on cooldown!"));
 		}
 
 		hasMovedThisBeat = true;
 		isAttacking = false;
+	}
+}
+
+void AMainCharacter::EquipWeapon(int32 slot)
+{
+	if (UAttackBase** attackPtr = attackSlots.Find(slot))
+	{
+		if (*attackPtr)
+		{
+			equippedWeapon = *attackPtr;
+		}
 	}
 }
 
@@ -218,14 +216,14 @@ void AMainCharacter::OnAttackKeyReleased()
 }
 
 void AMainCharacter::CycleWeaponCooldowns() {
-	TArray<FName> keys;
-	for (const TPair<FName, UAttackBase*>& Pair : attackSlots)
+	TArray<int32> keys;
+	for (const TPair<int32, UAttackBase*>& Pair : attackSlots)
 	{
 		keys.Add(Pair.Key);
 	}
 
 	// Now you can use the Keys array as needed.  
-	for (const FName& key : keys)
+	for (const int32& key : keys)
 	{
 		if (UAttackBase** attackPtr = attackSlots.Find(key))
 		{
@@ -255,18 +253,18 @@ void AMainCharacter::LevelUp() {
 	else if (level <= 20) xpToNextLevel += 13;
 	else xpToNextLevel += 16;
 
-	if (!WeaponDataTable) return;
+	if (!weaponDataTable) return;
 
 	TArray<FWeaponDataRow*> AllWeapons;
 	static const FString ContextString(TEXT("Weapon Selection"));
-	WeaponDataTable->GetAllRows<FWeaponDataRow>(ContextString, AllWeapons);
+	weaponDataTable->GetAllRows<FWeaponDataRow>(ContextString, AllWeapons);
 
 	int32 NumChoices = 3;
 	if (AllWeapons.Num() < NumChoices) return;
 
 	// Build a set of weapon classes the player owns at level 6
 	TSet<UClass*> MaxedWeaponClasses;
-	for (const TPair<FName, UAttackBase*>& Pair : attackSlots) {
+	for (const TPair<int32, UAttackBase*>& Pair : attackSlots) {
 		if (Pair.Value && Pair.Value->level >= 6) {
 			MaxedWeaponClasses.Add(Pair.Value->GetClass());
 		}
@@ -297,16 +295,16 @@ void AMainCharacter::LevelUp() {
 		}
 	}
 
-	if (WeaponSelectionWidgetClass) {
-		WeaponSelectionWidget = CreateWidget<UWeaponSelectionWidget>(GetWorld(), WeaponSelectionWidgetClass);
-		if (WeaponSelectionWidget) {
-			WeaponSelectionWidget->InitWeaponOptions(WeaponClasses);
-			WeaponSelectionWidget->AddToViewport();
+	if (weaponSelectionWidgetClass) {
+		weaponSelectionWidget = CreateWidget<UWeaponSelectionWidget>(GetWorld(), weaponSelectionWidgetClass);
+		if (weaponSelectionWidget) {
+			weaponSelectionWidget->InitWeaponOptions(WeaponClasses);
+			weaponSelectionWidget->AddToViewport();
 
 			if (APlayerController* PC = Cast<APlayerController>(GetController())) {
 				PC->SetPause(true);
 				FInputModeUIOnly InputMode;
-				InputMode.SetWidgetToFocus(WeaponSelectionWidget->TakeWidget());
+				InputMode.SetWidgetToFocus(weaponSelectionWidget->TakeWidget());
 				PC->SetInputMode(InputMode);
 				PC->bShowMouseCursor = true;
 			}
@@ -324,7 +322,6 @@ void AMainCharacter::GrantWeapon(TSubclassOf<UAttackBase> WeaponClass)
 		if (Pair.Value && Pair.Value->GetClass() == WeaponClass)
 		{
 			Pair.Value->levelUp();
-			UE_LOG(LogTemp, Log, TEXT("Leveled up weapon in slot %s"), *Pair.Key.ToString());
 			return;
 		}
 	}
@@ -333,14 +330,13 @@ void AMainCharacter::GrantWeapon(TSubclassOf<UAttackBase> WeaponClass)
 	UAttackBase* NewWeapon = NewObject<UAttackBase>(this, WeaponClass);
 	if (!NewWeapon) return;
 
-	static const TArray<FName> SlotOrder = { FName("Q"), FName("W"), FName("E"), FName("R") };
-	for (const FName& Slot : SlotOrder)
+	static const TArray<int32> SlotOrder = { 1, 2, 3, 4 };
+	for (const int32& Slot : SlotOrder)
 	{
 		if (!attackSlots.Contains(Slot) || attackSlots[Slot] == nullptr)
 		{
 			attackSlots.Add(Slot, NewWeapon);
 			NewWeapon->initializeAttack();
-			UE_LOG(LogTemp, Log, TEXT("Granted weapon to slot %s"), *Slot.ToString());
 			return;
 		}
 	}

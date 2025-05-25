@@ -9,10 +9,12 @@ UAttackBase::UAttackBase() {
 	owningCharacter = nullptr;
 }
 
-void UAttackBase::executeAttack_Implementation(AMainCharacter* instigatorCharacter)
+void UAttackBase::ExecuteAttack_Implementation(AMainCharacter* instigatorCharacter, FVector dir)
 {
 	if (!instigatorCharacter) return;
 	owningCharacter = instigatorCharacter;
+
+    baseRotation = inputDirection.Rotation();
 
 	usesLeft--;
 
@@ -112,9 +114,9 @@ void UAttackBase::levelUp() {
         break;
     }
 
-    cooldownLeft = 0;
-    usesLeft = uses;
-    isOnCooldown = false;
+    	cooldownLeft = 0;
+		usesLeft = uses;
+		isOnCooldown = false;
 
 	UE_LOG(LogTemp, Warning, TEXT("%s is now level %d"), *weaponName.ToString(), level);
 }

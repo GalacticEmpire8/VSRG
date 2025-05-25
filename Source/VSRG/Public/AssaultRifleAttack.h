@@ -14,7 +14,7 @@ class VSRG_API UAssaultRifleAttack : public UAttackBase
 public:
 	void initializeAttack();
 
-	virtual void executeAttack_Implementation(AMainCharacter* instigatorCharacter) override;
+	virtual void ExecuteAttack_Implementation(AMainCharacter* instigatorCharacter, FVector dir) override;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack")
 	float sprayAngle = 5.f;
