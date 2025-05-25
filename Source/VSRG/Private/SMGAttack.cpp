@@ -9,21 +9,16 @@
 #include <Projectile.h>
 #include <WeaponData.h>
 
-USMGAttack::USMGAttack()
-{
-	level = 1;
-	maxBullets = 0;
-	owningCharacter = nullptr;
-}
-
 void USMGAttack::initializeAttack()
 {
 	Super::initializeAttack();
+
+	maxBullets = 0;
 }
 
-void USMGAttack::ExecuteAttack_Implementation(AMainCharacter* instigatorCharacter, FVector dir)
+void USMGAttack::ExecuteAttack(AMainCharacter* instigatorCharacter, FVector dir)
 {
-	Super::ExecuteAttack_Implementation(instigatorCharacter, dir);
+	Super::ExecuteAttack(instigatorCharacter, dir);
 
 	bulletsFired = 0;
 	maxBullets = projectiles;

@@ -9,22 +9,18 @@
 #include <Projectile.h>
 #include <WeaponData.h>
 
-UPistolAttack::UPistolAttack()
-{
-	level = 1;
-	maxBullets = 0;
-	owningCharacter = nullptr;
-}
-
 void UPistolAttack::initializeAttack()
 {
 	Super::initializeAttack();
+
+	maxBullets = 0;
 }
 
-void UPistolAttack::ExecuteAttack_Implementation(AMainCharacter* instigatorCharacter, FVector dir)
+void UPistolAttack::ExecuteAttack(AMainCharacter* instigatorCharacter, FVector dir)
 {
-	Super::ExecuteAttack_Implementation(instigatorCharacter, dir);
+	Super::ExecuteAttack(instigatorCharacter, dir);
 
+	UE_LOG(LogTemp, Warning, TEXT("Pistol Attack"));
 	bulletsFired = 0;
 	maxBullets = projectiles;
 	UWorld* world = instigatorCharacter->GetWorld();

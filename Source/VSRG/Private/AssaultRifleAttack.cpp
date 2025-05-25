@@ -14,9 +14,9 @@ void UAssaultRifleAttack::initializeAttack()
 	maxBullets = 0;
 }
 
-void UAssaultRifleAttack::ExecuteAttack_Implementation(AMainCharacter* instigatorCharacter, FVector dir)
+void UAssaultRifleAttack::ExecuteAttack(AMainCharacter* instigatorCharacter, FVector dir)
 {
-	Super::ExecuteAttack_Implementation(instigatorCharacter, dir);
+	Super::ExecuteAttack(instigatorCharacter, dir);
 
 	bulletsFired = 0;
 	maxBullets = projectiles;

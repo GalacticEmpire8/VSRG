@@ -9,7 +9,7 @@ UAttackBase::UAttackBase() {
 	owningCharacter = nullptr;
 }
 
-void UAttackBase::ExecuteAttack_Implementation(AMainCharacter* instigatorCharacter, FVector dir)
+void UAttackBase::ExecuteAttack(AMainCharacter* instigatorCharacter, FVector dir)
 {
 	if (!instigatorCharacter) return;
 	owningCharacter = instigatorCharacter;

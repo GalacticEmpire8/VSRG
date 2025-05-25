@@ -16,7 +16,7 @@ public:
 
 	void levelUp();
 
-	virtual void ExecuteAttack_Implementation(AMainCharacter* instigatorCharacter, FVector dir) override;
+	virtual void ExecuteAttack(AMainCharacter* instigatorCharacter, FVector dir) override;
 
 	float coneHalfAngleDegrees = 40.0f;
 };

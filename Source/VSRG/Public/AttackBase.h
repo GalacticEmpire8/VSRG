@@ -44,10 +44,7 @@ public:
 
 	AMainCharacter* owningCharacter;
 
-	// called when the attack is triggered
-	UFUNCTION(BlueprintNativeEvent, Category = "Attack")
-	void ExecuteAttack(AMainCharacter* instigatorCharacter, FVector dir);
-	virtual void ExecuteAttack_Implementation(AMainCharacter* instigatorCharacter, FVector dir);
+	virtual void ExecuteAttack(AMainCharacter* instigatorCharacter, FVector dir);
 	
 	void initializeAttack();
 

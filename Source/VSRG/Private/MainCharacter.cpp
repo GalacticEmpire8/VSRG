@@ -76,7 +76,7 @@ void AMainCharacter::SetupPlayerInputComponent(class UInputComponent* InInputCom
 		enhancedInputComponent->BindAction(inputToMove, ETriggerEvent::Completed, this, &AMainCharacter::OnMoveKeyReleased);
 
 		enhancedInputComponent->BindAction(inputToAttack, ETriggerEvent::Started, this, &AMainCharacter::OnAttackKeyPressed);
-		enhancedInputComponent->BindAction(inputToAttack, ETriggerEvent::Triggered, this, &AMainCharacter::OnAttackKeyPressed);
+		enhancedInputComponent->BindAction(inputToAttack, ETriggerEvent::Triggered, this, &AMainCharacter::UseAttack);
 		enhancedInputComponent->BindAction(inputToAttack, ETriggerEvent::Completed, this, &AMainCharacter::OnAttackKeyReleased);
 
 		enhancedInputComponent->BindAction(slot1, ETriggerEvent::Triggered, this, &AMainCharacter::EquipWeapon, int32(1));
@@ -177,13 +177,16 @@ void AMainCharacter::UseAttack(const FInputActionValue& Value)
 
 	FVector2D dirValue = Value.Get<FVector2D>();
 	inputDirection = FVector(dirValue.X, dirValue.Y, 0.0f);
+	UE_LOG(LogTemp, Warning, TEXT("Attacking"));
 
 	if (VSRGGameMode->IsOnBeat()) {
 		if (equippedWeapon)
 		{
+			UE_LOG(LogTemp, Warning, TEXT("Using Equppied weapon"));
 			if (!equippedWeapon->isOnCooldown) { 
 				CycleWeaponCooldowns();
 				equippedWeapon->ExecuteAttack(this, inputDirection); 
+				UE_LOG(LogTemp, Warning, TEXT("Executing attack"));
 			}
 			else UE_LOG(LogTemp, Warning, TEXT("Attack is on cooldown!"));
 		}
@@ -191,6 +194,7 @@ void AMainCharacter::UseAttack(const FInputActionValue& Value)
 		hasMovedThisBeat = true;
 		isAttacking = false;
 	}
+	else UE_LOG(LogTemp, Warning, TEXT("Attack off beat"));
 }
 
 void AMainCharacter::EquipWeapon(int32 slot)
@@ -344,5 +348,5 @@ void AMainCharacter::GrantWeapon(TSubclassOf<UAttackBase> WeaponClass)
 
 void AMainCharacter::Debug_AddXP()
 {
-	AddXP(10.0f); // Adds 10 XP, adjust as needed
+	AddXP(100.0f); // Adds 10 XP, adjust as needed
 }

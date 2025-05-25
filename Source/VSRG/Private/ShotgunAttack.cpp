@@ -15,9 +15,9 @@ void UShotgunAttack::initializeAttack()
     coneHalfAngleDegrees = 30.0f;
 }
 
-void UShotgunAttack::ExecuteAttack_Implementation(AMainCharacter* instigatorCharacter, FVector dir)
+void UShotgunAttack::ExecuteAttack(AMainCharacter* instigatorCharacter, FVector dir)
 {
-    Super::ExecuteAttack_Implementation(instigatorCharacter, dir);
+    Super::ExecuteAttack(instigatorCharacter, dir);
 
     UWorld* world = instigatorCharacter->GetWorld();
     if (!world) return;
