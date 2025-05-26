@@ -7,9 +7,9 @@
 #include <Projectile.h>
 #include <WeaponData.h>
 
-void UAssaultRifleAttack::initializeAttack()
+void UAssaultRifleAttack::InitializeAttack()
 {
-	Super::initializeAttack();
+	Super::InitializeAttack();
 
 	maxBullets = 0;
 }

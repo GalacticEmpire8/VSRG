@@ -9,9 +9,9 @@
 #include <Projectile.h>
 #include <WeaponData.h>
 
-void USMGAttack::initializeAttack()
+void USMGAttack::InitializeAttack()
 {
-	Super::initializeAttack();
+	Super::InitializeAttack();
 
 	maxBullets = 0;
 }

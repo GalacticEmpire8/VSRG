@@ -45,11 +45,11 @@ public:
 
 	virtual void ExecuteAttack(AMainCharacter* instigatorCharacter, FVector dir);
 	
-	void initializeAttack();
+	virtual void InitializeAttack();
 
-	void onBeat();
+	void OnBeat();
 
-	void levelUp();
+	virtual void LevelUp();
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack")
 	FDataTableRowHandle DamageData;

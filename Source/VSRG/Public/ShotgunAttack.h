@@ -11,12 +11,13 @@ class VSRG_API UShotgunAttack : public UAttackBase
 {
 	GENERATED_BODY()
 
-public:
-	void initializeAttack();
+private:
+	float coneHalfAngleDegrees;
 
-	void levelUp();
+public:
+	virtual void InitializeAttack() override;
+
+	virtual void LevelUp() override;
 
 	virtual void ExecuteAttack(AMainCharacter* instigatorCharacter, FVector dir) override;
-
-	float coneHalfAngleDegrees = 40.0f;
 };

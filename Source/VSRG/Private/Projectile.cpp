@@ -23,11 +23,8 @@ AProjectile::AProjectile()
 void AProjectile::BeginPlay()
 {
 	Super::BeginPlay();
-	//UE_LOG(LogTemp, Display, TEXT("Projectile spawned"));
+
 	projectileMesh->OnComponentHit.AddDynamic(this, &AProjectile::OnHit);
-	/*/if (projectileMesh) {
-	//	UE_LOG(LogTemp, Display, TEXT("There is a projectile mesh"));
-	}/**/
 }
 
 // Called every frame
@@ -53,6 +50,6 @@ void AProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimi
 	if (OtherActor && OtherActor != this && OtherActor != MyOwner && !OtherActor->IsA(AProjectile::StaticClass()))
 	{
 		UGameplayStatics::ApplyDamage(OtherActor, damage, MyOwnerInstigator, this, DamageTypeClass);
+		Destroy();
 	}
-	Destroy();
 }

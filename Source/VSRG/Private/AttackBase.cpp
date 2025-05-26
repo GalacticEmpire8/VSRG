@@ -25,7 +25,7 @@ void UAttackBase::ExecuteAttack(AMainCharacter* instigatorCharacter, FVector dir
 	}
 }
 
-void UAttackBase::initializeAttack()
+void UAttackBase::InitializeAttack()
 {
 	// Initialize the attack properties based on the level
 	damageRow = DamageData.GetRow<FWeaponData>(TEXT("DamageData Context"));
@@ -51,9 +51,13 @@ void UAttackBase::initializeAttack()
 	rangeRow = RangeData.GetRow<FWeaponData>("");
 	if (rangeRow) range = rangeRow->Level1;
 	else range = 1000.f; // Default value if not found
+
+    cooldownLeft = 0;
+    usesLeft = uses;
+    isOnCooldown = false;
 }
 
-void UAttackBase::onBeat() {
+void UAttackBase::OnBeat() {
 	if (isOnCooldown) {
 		cooldownLeft--;
 	}
@@ -65,7 +69,7 @@ void UAttackBase::onBeat() {
 	}
 }
 
-void UAttackBase::levelUp() {
+void UAttackBase::LevelUp() {
 	if (level == 6) return;
 
 	level++;

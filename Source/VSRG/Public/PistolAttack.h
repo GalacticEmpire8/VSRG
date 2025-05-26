@@ -12,7 +12,7 @@ class VSRG_API UPistolAttack : public UAttackBase
 	GENERATED_BODY()
 
 public:
-	void initializeAttack();
+	virtual void InitializeAttack() override;
 
 	virtual void ExecuteAttack(AMainCharacter* instigatorCharacter, FVector dir) override;
 

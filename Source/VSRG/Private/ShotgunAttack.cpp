@@ -9,10 +9,10 @@
 #include <Projectile.h>
 #include <WeaponData.h>
 
-void UShotgunAttack::initializeAttack()
+void UShotgunAttack::InitializeAttack()
 {
-	Super::initializeAttack();
-    coneHalfAngleDegrees = 30.0f;
+	Super::InitializeAttack();
+    coneHalfAngleDegrees = 50.0f;
 }
 
 void UShotgunAttack::ExecuteAttack(AMainCharacter* instigatorCharacter, FVector dir)
@@ -23,35 +23,37 @@ void UShotgunAttack::ExecuteAttack(AMainCharacter* instigatorCharacter, FVector 
     if (!world) return;
 
     FVector spawnLocation = owningCharacter->GetActorLocation();
-    FVector forwardVector = baseRotation.Vector();
 
-    // Uniformly distribute projectiles in the cone
     for (int32 i = 0; i < projectiles; ++i)
     {
-        // Calculate the angle for this projectile
+        // Calculate the yaw offset for this projectile
         float fraction = (projectiles == 1) ? 0.5f : (float)i / (projectiles - 1);
-        float yaw = FMath::Lerp(-coneHalfAngleDegrees, coneHalfAngleDegrees, fraction);
+        float yawOffset = FMath::Lerp(-coneHalfAngleDegrees, coneHalfAngleDegrees, fraction);
 
+        // Create the rotation for this projectile
         FRotator shotRotation = baseRotation;
-        shotRotation.Yaw += yaw;
+        shotRotation.Yaw += yawOffset;
 
+        // Optionally offset spawn location to avoid self-collision
         FVector shotDirection = shotRotation.Vector();
+        FVector spawnOffset = shotDirection * 10.f;
+        FVector finalSpawnLocation = spawnLocation + spawnOffset;
 
-        // Spawn projectile
-        AProjectile* projectile = world->SpawnActor<AProjectile>(projectileActor, spawnLocation, shotRotation);
+        // Spawn the projectile with the correct rotation
+        AProjectile* projectile = world->SpawnActor<AProjectile>(projectileActor, finalSpawnLocation, shotRotation);
         if (projectile)
         {
             projectile->damage = damage;
+            projectile->SetOwner(owningCharacter);
             projectile->SetActorRotation(shotDirection.Rotation());
             projectile->projectileComponent->Velocity = shotDirection * projectile->projectileComponent->InitialSpeed;
             projectile->SetLifeSpan(0.1f);
-            projectile->SetOwner(owningCharacter);
         }
     }
 }
 
-void UShotgunAttack::levelUp() {
-    Super::levelUp();
+void UShotgunAttack::LevelUp() {
+    Super::LevelUp();
 
     switch (level) {
     case 2:

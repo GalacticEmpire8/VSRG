@@ -32,6 +32,7 @@ void AMainCharacter::HandleDestruction()
 void AMainCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+	VSRGGameMode = Cast<AVSRGGameMode>(GetWorld()->GetAuthGameMode());
 
      // Fix for the error: Replace the usage of GetKeys() with a manual iteration to collect keys.  
      TArray<int32> keys;  
@@ -48,7 +49,7 @@ void AMainCharacter::BeginPlay()
 			 if (*attackPtr)
 			 {
 				 equippedWeapon = *attackPtr;
-				 equippedWeapon->initializeAttack();
+				 equippedWeapon->InitializeAttack();
 			 }
 		 }
      }
@@ -57,9 +58,6 @@ void AMainCharacter::BeginPlay()
 void AMainCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
-	VSRGGameMode = Cast<AVSRGGameMode>(GetWorld()->GetAuthGameMode());
-	//UE_LOG(LogTemp, Warning, TEXT("The BPM is %d"), VSRGGameMode->getBPM());
 }
 
 void AMainCharacter::SetupPlayerInputComponent(class UInputComponent* InInputComponent)
@@ -115,18 +113,6 @@ void AMainCharacter::Move(FVector axisValue)
 	shouldTakeStep = false;
 }
 
-void AMainCharacter::OnMoveKeyPressed()
-{
-	shouldTakeStep = true;
-	moveKeyDown = true;
-}
-
-void AMainCharacter::OnMoveKeyReleased()
-{
-	shouldTakeStep = false;
-	moveKeyDown = false;
-}
-
 void AMainCharacter::EnhancedInputMove(const FInputActionValue& Value)
 {
 	FVector2D moveValue = Value.Get<FVector2D>();
@@ -163,6 +149,18 @@ void AMainCharacter::EnhancedInputMove(const FInputActionValue& Value)
 		UE_LOG(LogTemp, Warning, TEXT("Input is off the beat."));
 		inputOnBeat = false;
 	}
+}
+
+void AMainCharacter::OnMoveKeyPressed()
+{
+	shouldTakeStep = true;
+	moveKeyDown = true;
+}
+
+void AMainCharacter::OnMoveKeyReleased()
+{
+	shouldTakeStep = false;
+	moveKeyDown = false;
 }
 
 void AMainCharacter::OnBeat()
@@ -240,7 +238,7 @@ void AMainCharacter::CycleWeaponCooldowns() {
 		{
 			if (*attackPtr)
 			{
-				(*attackPtr)->onBeat();
+				(*attackPtr)->OnBeat();
 			}
 		}
 	}
@@ -332,7 +330,7 @@ void AMainCharacter::GrantWeapon(TSubclassOf<UAttackBase> WeaponClass)
 	{
 		if (Pair.Value && Pair.Value->GetClass() == WeaponClass)
 		{
-			Pair.Value->levelUp();
+			Pair.Value->LevelUp();
 			return;
 		}
 	}
@@ -347,7 +345,7 @@ void AMainCharacter::GrantWeapon(TSubclassOf<UAttackBase> WeaponClass)
 		if (!attackSlots.Contains(Slot) || attackSlots[Slot] == nullptr)
 		{
 			attackSlots.Add(Slot, NewWeapon);
-			NewWeapon->initializeAttack();
+			NewWeapon->InitializeAttack();
 			return;
 		}
 	}
