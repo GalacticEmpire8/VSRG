@@ -38,12 +38,6 @@
 /NOIMPLIB
 "H:\Unreal Projects\VSRG\VSRG\Intermediate\Build\Win64\x64\VSRGEditor\Development\UnrealEd\SharedPCH.UnrealEd.Project.ValApi.Cpp20.InclOrderUnreal5_3.h.obj"
 "H:\Unreal Projects\VSRG\VSRG\Plugins\VisualStudioTools\Intermediate\Build\Win64\x64\UnrealEditor\Development\VisualStudioTools\Module.VisualStudioTools.cpp.obj"
-"H:\Unreal Projects\VSRG\VSRG\Plugins\VisualStudioTools\Intermediate\Build\Win64\x64\UnrealEditor\Development\VisualStudioTools\BlueprintReferencesCommandlet.gen.cpp.obj"
-"H:\Unreal Projects\VSRG\VSRG\Plugins\VisualStudioTools\Intermediate\Build\Win64\x64\UnrealEditor\Development\VisualStudioTools\VisualStudioTools.init.gen.cpp.obj"
-"H:\Unreal Projects\VSRG\VSRG\Plugins\VisualStudioTools\Intermediate\Build\Win64\x64\UnrealEditor\Development\VisualStudioTools\VisualStudioToolsCommandlet.gen.cpp.obj"
-"H:\Unreal Projects\VSRG\VSRG\Plugins\VisualStudioTools\Intermediate\Build\Win64\x64\UnrealEditor\Development\VisualStudioTools\VisualStudioToolsCommandletBase.gen.cpp.obj"
-"H:\Unreal Projects\VSRG\VSRG\Plugins\VisualStudioTools\Intermediate\Build\Win64\x64\UnrealEditor\Development\VisualStudioTools\VSServerCommandlet.gen.cpp.obj"
-"H:\Unreal Projects\VSRG\VSRG\Plugins\VisualStudioTools\Intermediate\Build\Win64\x64\UnrealEditor\Development\VisualStudioTools\VSTestAdapterCommandlet.gen.cpp.obj"
 "H:\Unreal Projects\VSRG\VSRG\Plugins\VisualStudioTools\Intermediate\Build\Win64\x64\UnrealEditor\Development\VisualStudioTools\Default.rc2.res"
 "..\Intermediate\Build\Win64\x64\UnrealEditor\Development\AssetRegistry\UnrealEditor-AssetRegistry.lib"
 "..\Intermediate\Build\Win64\x64\UnrealEditor\Development\CoreUObject\UnrealEditor-CoreUObject.lib"
