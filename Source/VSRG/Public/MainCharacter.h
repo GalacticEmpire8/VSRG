@@ -53,7 +53,6 @@ private:
 	void LevelUp();
 
 public:
-	FVector inputDirection;
 	UAttackBase* equippedWeapon;
 
 	virtual void Tick(float DeltaSeconds) override;

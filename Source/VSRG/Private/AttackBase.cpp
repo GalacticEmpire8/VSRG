@@ -11,10 +11,11 @@ UAttackBase::UAttackBase() {
 
 void UAttackBase::ExecuteAttack(AMainCharacter* instigatorCharacter, FVector dir)
 {
+    UE_LOG(LogTemp, Warning, TEXT("ATTACK BASE EXECUTE ATTACK"));
 	if (!instigatorCharacter) return;
 	owningCharacter = instigatorCharacter;
 
-    baseRotation = inputDirection.Rotation();
+    baseRotation = dir.Rotation();
 
 	usesLeft--;
 

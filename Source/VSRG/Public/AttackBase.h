@@ -20,7 +20,6 @@ class VSRG_API UAttackBase : public UObject
 	GENERATED_BODY()
 
 protected:
-	FVector inputDirection;
 	FRotator baseRotation;
 
 public:

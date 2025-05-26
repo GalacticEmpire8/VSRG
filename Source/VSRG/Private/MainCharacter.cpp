@@ -130,7 +130,6 @@ void AMainCharacter::OnMoveKeyReleased()
 void AMainCharacter::EnhancedInputMove(const FInputActionValue& Value)
 {
 	FVector2D moveValue = Value.Get<FVector2D>();
-	inputDirection = FVector(moveValue.X, moveValue.Y, 0.0f);
 
 	if (hasMovedThisBeat) return;
 	if (isAttacking) return;
@@ -176,8 +175,6 @@ void AMainCharacter::UseAttack(const FInputActionValue& Value)
 	if (hasMovedThisBeat) return;
 
 	FVector2D dirValue = Value.Get<FVector2D>();
-	inputDirection = FVector(dirValue.X, dirValue.Y, 0.0f);
-	UE_LOG(LogTemp, Warning, TEXT("Attacking"));
 
 	if (VSRGGameMode->IsOnBeat()) {
 		if (equippedWeapon)
@@ -185,7 +182,17 @@ void AMainCharacter::UseAttack(const FInputActionValue& Value)
 			UE_LOG(LogTemp, Warning, TEXT("Using Equppied weapon"));
 			if (!equippedWeapon->isOnCooldown) { 
 				CycleWeaponCooldowns();
-				equippedWeapon->ExecuteAttack(this, inputDirection); 
+
+				if (dirValue.X > 0.05f || dirValue.X < -0.05f) {
+					FVector inputDirection = FVector(dirValue.X, 0.0f, 0.0f);
+					equippedWeapon->ExecuteAttack(this, inputDirection);
+				}
+
+				if (dirValue.Y > 0.05f || dirValue.Y < -0.05f) {
+					FVector inputDirection = FVector(0.0f, dirValue.Y, 0.0f);
+					equippedWeapon->ExecuteAttack(this, inputDirection);
+				}
+
 				UE_LOG(LogTemp, Warning, TEXT("Executing attack"));
 			}
 			else UE_LOG(LogTemp, Warning, TEXT("Attack is on cooldown!"));
