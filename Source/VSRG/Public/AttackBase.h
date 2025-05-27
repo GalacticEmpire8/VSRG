@@ -31,8 +31,6 @@ public:
 	int32 pierce;
 	int32 uses;
 	int32 range;
-	
-	int rarity;
 
 	FWeaponData* damageRow;
 	FWeaponData* cooldownRow;

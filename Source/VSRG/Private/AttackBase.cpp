@@ -4,7 +4,6 @@
 #include "AttackBase.h"
 
 UAttackBase::UAttackBase() {
-	rarity = 100;
 	level = 1;
 	owningCharacter = nullptr;
 }

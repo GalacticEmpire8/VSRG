@@ -6,7 +6,6 @@
 #include "InputMappingContext.h"
 #include "Projectile.h"
 #include "AttackBase.h"
-#include "WeaponDataRow.h"
 #include "EnhancedInputSubsystems.h"
 
 AMainCharacter::AMainCharacter()
@@ -271,36 +270,100 @@ void AMainCharacter::LevelUp() {
 	int32 NumChoices = 3;
 	if (AllWeapons.Num() < NumChoices) return;
 
-	// Build a set of weapon classes the player owns at level 6
-	TSet<UClass*> MaxedWeaponClasses;
+	// Build owned weapon set and option pool, and track level 6 weapons
+	TMap<UClass*, int32> OwnedWeaponLevels;
 	for (const TPair<int32, UAttackBase*>& Pair : attackSlots) {
-		if (Pair.Value && Pair.Value->level >= 6) {
-			MaxedWeaponClasses.Add(Pair.Value->GetClass());
+		if (Pair.Value) {
+			OwnedWeaponLevels.Add(Pair.Value->GetClass(), Pair.Value->level);
 		}
 	}
 
-	// Filter out weapons the player owns at level 6
-	TArray<FWeaponDataRow*> AvailableWeapons;
-	for (FWeaponDataRow* WeaponRow : AllWeapons) {
-		if (WeaponRow && WeaponRow->WeaponClass) {
-			if (!MaxedWeaponClasses.Contains(WeaponRow->WeaponClass)) {
-				AvailableWeapons.Add(WeaponRow);
+	// Check if all 4 slots are filled (i.e., player owns 4 weapons)
+	bool bAllSlotsFilled = true;
+	static const TArray<int32> SlotOrder = { 1, 2, 3, 4 };
+	for (const int32& Slot : SlotOrder)
+	{
+		UAttackBase** WeaponPtr = attackSlots.Find(Slot);
+		if (!WeaponPtr || *WeaponPtr == nullptr)
+		{
+			bAllSlotsFilled = false;
+			break;
+		}
+	}
+
+	TArray<FWeaponOption> Pool;
+	TArray<FWeaponOption> OwnedOptions;
+	for (FWeaponDataRow* Row : AllWeapons) {
+		if (!Row || !Row->WeaponClass) continue;
+		int32* OwnedLevel = OwnedWeaponLevels.Find(Row->WeaponClass);
+		bool bIsOwned = OwnedLevel != nullptr;
+		bool bIsMaxed = bIsOwned && *OwnedLevel >= 6;
+		if (bIsMaxed) continue; // Skip maxed weapons
+
+		// If all slots are filled, only offer owned weapons
+		if (bAllSlotsFilled && !bIsOwned) continue;
+
+		FWeaponOption Option{ Row, Row->rarity, bIsOwned };
+		Pool.Add(Option);
+		if (bIsOwned) OwnedOptions.Add(Option);
+	}
+
+	// Calculate ownedChance
+	float totalLuck = 1.0f; // Replace with your actual luck value
+	int32 x = (level % 2 == 0) ? 2 : 1;
+	float ownedChance = 1 + 0.3f * x - 1 / totalLuck;
+
+	TArray<FWeaponOption> Selected;
+	TSet<FWeaponDataRow*> AlreadySelected;
+
+	// Try to select up to 2 owned items
+	for (int32 ownedRoll = 0; ownedRoll < 2 && Selected.Num() < NumChoices; ++ownedRoll) {
+		if (OwnedOptions.Num() == 0) break;
+		if (FMath::FRand() < ownedChance) {
+			// Pick a random owned item not already selected
+			TArray<FWeaponOption> AvailableOwned;
+			for (const FWeaponOption& Option : OwnedOptions) {
+				if (!AlreadySelected.Contains(Option.DataRow))
+					AvailableOwned.Add(Option);
+			}
+			if (AvailableOwned.Num() > 0) {
+				int32 idx = FMath::RandRange(0, AvailableOwned.Num() - 1);
+				Selected.Add(AvailableOwned[idx]);
+				AlreadySelected.Add(AvailableOwned[idx].DataRow);
 			}
 		}
 	}
 
-	if (AvailableWeapons.Num() < NumChoices) return;
+	// Fill remaining slots with weighted random selection from pool (excluding already selected)
+	while (Selected.Num() < NumChoices) {
+		// Remove already selected from pool
+		TArray<FWeaponOption> AvailablePool;
+		int32 totalWeight = 0;
+		for (const FWeaponOption& Option : Pool) {
+			if (!AlreadySelected.Contains(Option.DataRow)) {
+				AvailablePool.Add(Option);
+				totalWeight += Option.Rarity;
+			}
+		}
+		if (AvailablePool.Num() == 0 || totalWeight == 0) break;
 
-	// Shuffle
-	for (int32 i = AvailableWeapons.Num() - 1; i > 0; --i) {
-		int32 j = FMath::RandRange(0, i);
-		AvailableWeapons.Swap(i, j);
+		int32 randWeight = FMath::RandRange(0, totalWeight - 1);
+		int32 runningWeight = 0;
+		for (const FWeaponOption& Option : AvailablePool) {
+			runningWeight += Option.Rarity;
+			if (randWeight < runningWeight) {
+				Selected.Add(Option);
+				AlreadySelected.Add(Option.DataRow);
+				break;
+			}
+		}
 	}
 
+	// Prepare the final weapon class array for the widget
 	TArray<TSubclassOf<UAttackBase>> WeaponClasses;
-	for (int32 i = 0; i < NumChoices; ++i) {
-		if (AvailableWeapons[i]->WeaponClass) {
-			WeaponClasses.Add(AvailableWeapons[i]->WeaponClass);
+	for (const FWeaponOption& Option : Selected) {
+		if (Option.DataRow && Option.DataRow->WeaponClass) {
+			WeaponClasses.Add(Option.DataRow->WeaponClass);
 		}
 	}
 

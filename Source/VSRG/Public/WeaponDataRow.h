@@ -17,4 +17,7 @@ struct VSRG_API FWeaponDataRow : public FTableRowBase
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
     TSubclassOf<UAttackBase> WeaponClass;
 
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    int32 rarity;
+
 };

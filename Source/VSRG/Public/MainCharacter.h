@@ -7,11 +7,19 @@
 #include "VSRGGameMode.h"
 #include "InputAction.h"
 #include "WeaponSelectionWidget.h"
+#include "WeaponDataRow.h"
 #include "MainCharacter.generated.h"
 
 
 class UAttackBase;
 class AProjectile;
+
+struct FWeaponOption
+{
+	FWeaponDataRow* DataRow;
+	int32 Rarity;
+	bool bIsOwned;
+};
 
 /**
  *
@@ -36,6 +44,7 @@ private:
 	bool isAttacking;
 	bool onBeat;
 	bool moveKeyDown;
+
 
 
 	//input functions
