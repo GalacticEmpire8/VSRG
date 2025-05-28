@@ -8,20 +8,55 @@ void UWeaponSelectionWidget::InitWeaponOptions(const TArray<TSubclassOf<UAttackB
 {
     WeaponOptions = Options;
 
-    if (WeaponText1 && WeaponOptions.IsValidIndex(0) && WeaponOptions[0])
+    // Option 1
+    if (WeaponText1 && WeaponButton1)
     {
-        UAttackBase* DefaultObj = WeaponOptions[0]->GetDefaultObject<UAttackBase>();
-        WeaponText1->SetText(DefaultObj->weaponName);
+        if (WeaponOptions.IsValidIndex(0) && WeaponOptions[0])
+        {
+            UAttackBase* DefaultObj = WeaponOptions[0]->GetDefaultObject<UAttackBase>();
+            WeaponText1->SetText(DefaultObj->weaponName);
+            WeaponButton1->SetVisibility(ESlateVisibility::Visible);
+            WeaponText1->SetVisibility(ESlateVisibility::Visible);
+        }
+        else
+        {
+            WeaponButton1->SetVisibility(ESlateVisibility::Collapsed);
+            WeaponText1->SetVisibility(ESlateVisibility::Collapsed);
+        }
     }
-    if (WeaponText2 && WeaponOptions.IsValidIndex(1) && WeaponOptions[1])
+
+    // Option 2
+    if (WeaponText2 && WeaponButton2)
     {
-        UAttackBase* DefaultObj = WeaponOptions[1]->GetDefaultObject<UAttackBase>();
-        WeaponText2->SetText(DefaultObj->weaponName);
+        if (WeaponOptions.IsValidIndex(1) && WeaponOptions[1])
+        {
+            UAttackBase* DefaultObj = WeaponOptions[1]->GetDefaultObject<UAttackBase>();
+            WeaponText2->SetText(DefaultObj->weaponName);
+            WeaponButton2->SetVisibility(ESlateVisibility::Visible);
+            WeaponText2->SetVisibility(ESlateVisibility::Visible);
+        }
+        else
+        {
+            WeaponButton2->SetVisibility(ESlateVisibility::Collapsed);
+            WeaponText2->SetVisibility(ESlateVisibility::Collapsed);
+        }
     }
-    if (WeaponText3 && WeaponOptions.IsValidIndex(2) && WeaponOptions[2])
+
+    // Option 3
+    if (WeaponText3 && WeaponButton3)
     {
-        UAttackBase* DefaultObj = WeaponOptions[2]->GetDefaultObject<UAttackBase>();
-        WeaponText3->SetText(DefaultObj->weaponName);
+        if (WeaponOptions.IsValidIndex(2) && WeaponOptions[2])
+        {
+            UAttackBase* DefaultObj = WeaponOptions[2]->GetDefaultObject<UAttackBase>();
+            WeaponText3->SetText(DefaultObj->weaponName);
+            WeaponButton3->SetVisibility(ESlateVisibility::Visible);
+            WeaponText3->SetVisibility(ESlateVisibility::Visible);
+        }
+        else
+        {
+            WeaponButton3->SetVisibility(ESlateVisibility::Collapsed);
+            WeaponText3->SetVisibility(ESlateVisibility::Collapsed);
+        }
     }
 }
 

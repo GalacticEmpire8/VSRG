@@ -123,4 +123,7 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "XP")
 	int level;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
+	float defense;
 };

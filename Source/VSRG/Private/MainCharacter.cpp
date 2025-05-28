@@ -370,7 +370,7 @@ void AMainCharacter::LevelUp() {
 	if (weaponSelectionWidgetClass) {
 		weaponSelectionWidget = CreateWidget<UWeaponSelectionWidget>(GetWorld(), weaponSelectionWidgetClass);
 		if (weaponSelectionWidget) {
-			weaponSelectionWidget->InitWeaponOptions(WeaponClasses);
+			weaponSelectionWidget->InitWeaponOptions(WeaponClasses); // Only contains available options
 			weaponSelectionWidget->AddToViewport();
 
 			if (APlayerController* PC = Cast<APlayerController>(GetController())) {
