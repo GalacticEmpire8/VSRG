@@ -47,7 +47,7 @@ private:
 	bool onBeat;
 	bool moveKeyDown;
 
-
+	U
 
 	//input functions
 	void Move(FVector axisValue);
