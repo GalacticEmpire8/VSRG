@@ -47,8 +47,6 @@ private:
 	bool onBeat;
 	bool moveKeyDown;
 
-	U
-
 	//input functions
 	void Move(FVector axisValue);
 	void OnMoveKeyPressed();
@@ -64,7 +62,10 @@ private:
 	void LevelUp();
 
 public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Equipped")
 	UAttackBase* equippedWeapon;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Equipped")
 	TArray<UPassiveBase*> passiveItems;
 
 	virtual void Tick(float DeltaSeconds) override;
