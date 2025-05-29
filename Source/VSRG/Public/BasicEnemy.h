@@ -41,6 +41,9 @@ private:
 	UPROPERTY(EditAnywhere);
 	float EnemyDamage = 5;
 
+	UPROPERTY(EditAnywhere);
+	float BeatsToMove = 2;
+
 	//Function that handles the movement of the enemy
 	void Move();
 
