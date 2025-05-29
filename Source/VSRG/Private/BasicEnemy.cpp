@@ -62,53 +62,57 @@ void ABasicEnemy::Move()
 
 	int EnemyStep = 32; // Distance the enemy moves 
 	const float AttackRange = 32.0f;
-
-	Player = Cast<AMainCharacter>(UGameplayStatics::GetActorOfClass(this, AMainCharacter::StaticClass()));
-	if (Player) {
-		FVector PlayerLocation = Player->GetActorLocation();
-		FVector EnemyLocation = GetActorLocation();
-		UE_LOG(LogTemp, Warning, TEXT("Player location is %s"), *PlayerLocation.ToString());
-		UE_LOG(LogTemp, Warning, TEXT("Enemy location is %s"), *EnemyLocation.ToString());
-		if (FVector::Dist2D(PlayerLocation, EnemyLocation) <= AttackRange)
-		{
-			UE_LOG(LogTemp, Display, TEXT("Enemy is near the player "));
-			EnemyAttack();
+	BeatsToMove += 1;
+	if (BeatsToMove >= 2)
+	{
+		Player = Cast<AMainCharacter>(UGameplayStatics::GetActorOfClass(this, AMainCharacter::StaticClass()));
+		if (Player) {
+			FVector PlayerLocation = Player->GetActorLocation();
+			FVector EnemyLocation = GetActorLocation();
+			UE_LOG(LogTemp, Warning, TEXT("Player location is %s"), *PlayerLocation.ToString());
+			UE_LOG(LogTemp, Warning, TEXT("Enemy location is %s"), *EnemyLocation.ToString());
+			if (FVector::Dist2D(PlayerLocation, EnemyLocation) <= AttackRange)
+			{
+				UE_LOG(LogTemp, Display, TEXT("Enemy is near the player "));
+				EnemyAttack();
+			}
+			else if ((abs(PlayerLocation.X - EnemyLocation.X) == abs(PlayerLocation.Y - EnemyLocation.Y)))
+			{
+				if (abs(PlayerLocation.X > EnemyLocation.X) && abs(PlayerLocation.Y > EnemyLocation.Y)) {
+					SetActorLocation(FVector(EnemyLocation.X + EnemyStep, EnemyLocation.Y + EnemyStep, EnemyLocation.Z));
+				}
+				else if (abs(PlayerLocation.X < EnemyLocation.X) && abs(PlayerLocation.Y < EnemyLocation.Y)) {
+					SetActorLocation(FVector(EnemyLocation.X - EnemyStep, EnemyLocation.Y - EnemyStep, EnemyLocation.Z));
+				}
+				else if (abs(PlayerLocation.X < EnemyLocation.X) && abs(PlayerLocation.Y > EnemyLocation.Y)) {
+					SetActorLocation(FVector(EnemyLocation.X - EnemyStep, EnemyLocation.Y + EnemyStep, EnemyLocation.Z));
+				}
+				else if (abs(PlayerLocation.X > EnemyLocation.X) && abs(PlayerLocation.Y > EnemyLocation.Y)) {
+					SetActorLocation(FVector(EnemyLocation.X - EnemyStep, EnemyLocation.Y + EnemyStep, EnemyLocation.Z));
+				}
+			}
+			else if (abs(PlayerLocation.X - EnemyLocation.X) > abs(PlayerLocation.Y - EnemyLocation.Y)) {
+				if (PlayerLocation.X > EnemyLocation.X) {
+					SetActorLocation(FVector(EnemyLocation.X + EnemyStep, EnemyLocation.Y, EnemyLocation.Z));
+				}
+				else if (PlayerLocation.X < EnemyLocation.X) {
+					SetActorLocation(FVector(EnemyLocation.X - EnemyStep, EnemyLocation.Y, EnemyLocation.Z));
+				}
+			}
+			else if (abs(PlayerLocation.X - EnemyLocation.X) < abs(PlayerLocation.Y - EnemyLocation.Y))
+			{
+				if (PlayerLocation.Y > EnemyLocation.Y) {
+					SetActorLocation(FVector(EnemyLocation.X, EnemyLocation.Y + EnemyStep, EnemyLocation.Z));
+				}
+				else if (PlayerLocation.Y < EnemyLocation.Y) {
+					SetActorLocation(FVector(EnemyLocation.X, EnemyLocation.Y - EnemyStep, EnemyLocation.Z));
+				}
+			}
+			else {
+				UE_LOG(LogTemp, Display, TEXT("Player and enemy are in the same location"));
+			}
 		}
-		else if ((abs(PlayerLocation.X - EnemyLocation.X) == abs(PlayerLocation.Y - EnemyLocation.Y)))
-		{
-			if (abs(PlayerLocation.X > EnemyLocation.X) && abs(PlayerLocation.Y > EnemyLocation.Y)) {
-				SetActorLocation(FVector(EnemyLocation.X + EnemyStep, EnemyLocation.Y + EnemyStep, EnemyLocation.Z));
-			}
-			else if (abs(PlayerLocation.X < EnemyLocation.X) && abs(PlayerLocation.Y < EnemyLocation.Y)) {
-				SetActorLocation(FVector(EnemyLocation.X - EnemyStep, EnemyLocation.Y - EnemyStep, EnemyLocation.Z));
-			}
-			else if (abs(PlayerLocation.X < EnemyLocation.X) && abs(PlayerLocation.Y > EnemyLocation.Y)) {
-				SetActorLocation(FVector(EnemyLocation.X - EnemyStep, EnemyLocation.Y + EnemyStep, EnemyLocation.Z));
-			}
-			else if (abs(PlayerLocation.X > EnemyLocation.X) && abs(PlayerLocation.Y > EnemyLocation.Y)) {
-				SetActorLocation(FVector(EnemyLocation.X - EnemyStep, EnemyLocation.Y + EnemyStep, EnemyLocation.Z));
-			}
-		}
-		else if (abs(PlayerLocation.X - EnemyLocation.X) > abs(PlayerLocation.Y - EnemyLocation.Y)) {
-			if (PlayerLocation.X > EnemyLocation.X) {
-				SetActorLocation(FVector(EnemyLocation.X + EnemyStep, EnemyLocation.Y, EnemyLocation.Z));
-			}
-			else if (PlayerLocation.X < EnemyLocation.X) {
-				SetActorLocation(FVector(EnemyLocation.X - EnemyStep, EnemyLocation.Y, EnemyLocation.Z));
-			}
-		}
-		else if (abs(PlayerLocation.X - EnemyLocation.X) < abs(PlayerLocation.Y - EnemyLocation.Y))
-		{
-			if (PlayerLocation.Y > EnemyLocation.Y) {
-				SetActorLocation(FVector(EnemyLocation.X, EnemyLocation.Y + EnemyStep, EnemyLocation.Z));
-			}
-			else if (PlayerLocation.Y < EnemyLocation.Y) {
-				SetActorLocation(FVector(EnemyLocation.X, EnemyLocation.Y - EnemyStep, EnemyLocation.Z));
-			}
-		}
-		else {
-			UE_LOG(LogTemp, Display, TEXT("Player and enemy are in the same location"));
-		}
+		BeatsToMove = 0;
 	}
 }
 
