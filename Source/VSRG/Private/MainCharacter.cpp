@@ -6,6 +6,8 @@
 #include "InputMappingContext.h"
 #include "Projectile.h"
 #include "AttackBase.h"
+#include "Item.h"
+#include "PassiveItem.h"
 #include "EnhancedInputSubsystems.h"
 
 AMainCharacter::AMainCharacter()
@@ -18,6 +20,7 @@ AMainCharacter::AMainCharacter()
 	xp = 0;
 	xpToNextLevel = 5;
 	level = 1;
+	defense = 0;
 	moveKeyDown = false;
 	hasMovedThisBeat = false;
 }
@@ -32,6 +35,11 @@ void AMainCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	VSRGGameMode = Cast<AVSRGGameMode>(GetWorld()->GetAuthGameMode());
+
+	if (!healthComponent)
+	{
+		healthComponent = FindComponentByClass<UHealthComponent>();
+	}
 
      // Fix for the error: Replace the usage of GetKeys() with a manual iteration to collect keys.  
      TArray<int32> keys;  
@@ -261,14 +269,14 @@ void AMainCharacter::LevelUp() {
 	else if (level <= 20) xpToNextLevel += 13;
 	else xpToNextLevel += 16;
 
-	if (!weaponDataTable) return;
+	if (!itemDataTable) return;
 
-	TArray<FWeaponDataRow*> AllWeapons;
+	TArray<FItemDataRow*> allItems;
 	static const FString ContextString(TEXT("Weapon Selection"));
-	weaponDataTable->GetAllRows<FWeaponDataRow>(ContextString, AllWeapons);
+	itemDataTable->GetAllRows<FItemDataRow>(ContextString, allItems);
 
 	int32 NumChoices = 3;
-	if (AllWeapons.Num() < NumChoices) return;
+	if (allItems.Num() < NumChoices) return;
 
 	// Build owned weapon set and option pool, and track level 6 weapons
 	TMap<UClass*, int32> OwnedWeaponLevels;
@@ -291,19 +299,19 @@ void AMainCharacter::LevelUp() {
 		}
 	}
 
-	TArray<FWeaponOption> Pool;
-	TArray<FWeaponOption> OwnedOptions;
-	for (FWeaponDataRow* Row : AllWeapons) {
-		if (!Row || !Row->WeaponClass) continue;
-		int32* OwnedLevel = OwnedWeaponLevels.Find(Row->WeaponClass);
+	TArray<FItemOption> Pool;
+	TArray<FItemOption> OwnedOptions;
+	for (FItemDataRow* Row : allItems) {
+		if (!Row || !Row->itemClass) continue;
+		int32* OwnedLevel = OwnedWeaponLevels.Find(Row->itemClass);
 		bool bIsOwned = OwnedLevel != nullptr;
-		bool bIsMaxed = bIsOwned && *OwnedLevel >= 6;
+		bool bIsMaxed = bIsOwned && *OwnedLevel >= 6 && OwnedLevel;
 		if (bIsMaxed) continue; // Skip maxed weapons
 
 		// If all slots are filled, only offer owned weapons
 		if (bAllSlotsFilled && !bIsOwned) continue;
 
-		FWeaponOption Option{ Row, Row->rarity, bIsOwned };
+		FItemOption Option{ Row, Row->rarity, bIsOwned };
 		Pool.Add(Option);
 		if (bIsOwned) OwnedOptions.Add(Option);
 	}
@@ -313,16 +321,16 @@ void AMainCharacter::LevelUp() {
 	int32 x = (level % 2 == 0) ? 2 : 1;
 	float ownedChance = 1 + 0.3f * x - 1 / totalLuck;
 
-	TArray<FWeaponOption> Selected;
-	TSet<FWeaponDataRow*> AlreadySelected;
+	TArray<FItemOption> Selected;
+	TSet<FItemDataRow*> AlreadySelected;
 
 	// Try to select up to 2 owned items
 	for (int32 ownedRoll = 0; ownedRoll < 2 && Selected.Num() < NumChoices; ++ownedRoll) {
 		if (OwnedOptions.Num() == 0) break;
 		if (FMath::FRand() < ownedChance) {
 			// Pick a random owned item not already selected
-			TArray<FWeaponOption> AvailableOwned;
-			for (const FWeaponOption& Option : OwnedOptions) {
+			TArray<FItemOption> AvailableOwned;
+			for (const FItemOption& Option : OwnedOptions) {
 				if (!AlreadySelected.Contains(Option.DataRow))
 					AvailableOwned.Add(Option);
 			}
@@ -337,9 +345,9 @@ void AMainCharacter::LevelUp() {
 	// Fill remaining slots with weighted random selection from pool (excluding already selected)
 	while (Selected.Num() < NumChoices) {
 		// Remove already selected from pool
-		TArray<FWeaponOption> AvailablePool;
+		TArray<FItemOption> AvailablePool;
 		int32 totalWeight = 0;
-		for (const FWeaponOption& Option : Pool) {
+		for (const FItemOption& Option : Pool) {
 			if (!AlreadySelected.Contains(Option.DataRow)) {
 				AvailablePool.Add(Option);
 				totalWeight += Option.Rarity;
@@ -349,7 +357,7 @@ void AMainCharacter::LevelUp() {
 
 		int32 randWeight = FMath::RandRange(0, totalWeight - 1);
 		int32 runningWeight = 0;
-		for (const FWeaponOption& Option : AvailablePool) {
+		for (const FItemOption& Option : AvailablePool) {
 			runningWeight += Option.Rarity;
 			if (randWeight < runningWeight) {
 				Selected.Add(Option);
@@ -360,17 +368,17 @@ void AMainCharacter::LevelUp() {
 	}
 
 	// Prepare the final weapon class array for the widget
-	TArray<TSubclassOf<UAttackBase>> WeaponClasses;
-	for (const FWeaponOption& Option : Selected) {
-		if (Option.DataRow && Option.DataRow->WeaponClass) {
-			WeaponClasses.Add(Option.DataRow->WeaponClass);
+	TArray<TSubclassOf<UItem>> WeaponClasses;
+	for (const FItemOption& Option : Selected) {
+		if (Option.DataRow && Option.DataRow->itemClass) {
+			WeaponClasses.Add(Option.DataRow->itemClass);
 		}
 	}
 
 	if (weaponSelectionWidgetClass) {
 		weaponSelectionWidget = CreateWidget<UWeaponSelectionWidget>(GetWorld(), weaponSelectionWidgetClass);
 		if (weaponSelectionWidget) {
-			weaponSelectionWidget->InitWeaponOptions(WeaponClasses);
+			weaponSelectionWidget->InitWeaponOptions(WeaponClasses); // Only contains available options
 			weaponSelectionWidget->AddToViewport();
 
 			if (APlayerController* PC = Cast<APlayerController>(GetController())) {
@@ -384,7 +392,7 @@ void AMainCharacter::LevelUp() {
 	}
 }
 
-void AMainCharacter::GrantWeapon(TSubclassOf<UAttackBase> WeaponClass)
+void AMainCharacter::GrantWeapon(TSubclassOf<UItem> WeaponClass)
 {
 	if (!WeaponClass) return;
 
@@ -410,6 +418,35 @@ void AMainCharacter::GrantWeapon(TSubclassOf<UAttackBase> WeaponClass)
 			attackSlots.Add(Slot, NewWeapon);
 			NewWeapon->InitializeAttack();
 			return;
+		}
+	}
+}
+
+void AMainCharacter::GrantPassive(TSubclassOf<UItem> PassiveClass)
+{
+	if (!PassiveClass) return;
+
+	UPassiveBase* Existing = nullptr;
+	for (UPassiveBase* Passive : passiveItems)
+	{
+		if (Passive && Passive->GetClass() == PassiveClass)
+		{
+			Existing = Passive;
+			break;
+		}
+	}
+
+	if (Existing)
+	{
+		Existing->Upgrade(this);
+	}
+	else
+	{
+		UPassiveBase* NewPassive = NewObject<UPassiveBase>(this, PassiveClass);
+		if (NewPassive)
+		{
+			NewPassive->Apply(this);
+			passiveItems.Add(NewPassive);
 		}
 	}
 }

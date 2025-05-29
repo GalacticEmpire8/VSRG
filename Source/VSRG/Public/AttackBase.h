@@ -6,6 +6,7 @@
 #include "UObject/NoExportTypes.h"
 #include <VSRGGameMode.h>
 #include "WeaponData.h"
+#include "Item.h"
 #include "AttackBase.generated.h"
 
 class AProjectile;
@@ -15,7 +16,7 @@ class AMainCharacter;
  *
  */
 UCLASS(Blueprintable, BlueprintType, EditInlineNew, DefaultToInstanced)
-class VSRG_API UAttackBase : public UObject
+class VSRG_API UAttackBase : public UItem
 {
 	GENERATED_BODY()
 
@@ -78,10 +79,4 @@ public:
 
 	UPROPERTY(BlueprintReadOnly, Category = "Attack")
 	int cooldownLeft;
-
-	UPROPERTY(BlueprintReadOnly, Category = "Attack")
-	int level;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Name")
-	FText weaponName;
 };

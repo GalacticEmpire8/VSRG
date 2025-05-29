@@ -7,15 +7,15 @@
 #include "WeaponDataRow.generated.h"
 
 USTRUCT(Blueprintable, BlueprintType)
-struct VSRG_API FWeaponDataRow : public FTableRowBase
+struct VSRG_API FItemDataRow : public FTableRowBase
 {
     GENERATED_BODY()
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
-    FName WeaponName;
+    FName itemName;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
-    TSubclassOf<UAttackBase> WeaponClass;
+    TSubclassOf<UItem> itemClass;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
     int32 rarity;

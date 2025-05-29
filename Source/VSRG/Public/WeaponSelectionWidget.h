@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 #include "AttackBase.h"
+#include "PassiveItem.h"
 #include <Components/Button.h>
 #include "Components/TextBlock.h"
 #include "WeaponSelectionWidget.generated.h"
@@ -17,16 +18,16 @@ class VSRG_API UWeaponSelectionWidget : public UUserWidget
 
 public:
     UFUNCTION(BlueprintCallable)
-    void InitWeaponOptions(const TArray<TSubclassOf<UAttackBase>>& Options);
+    void InitWeaponOptions(const TArray<TSubclassOf<UItem>>& Options);
 
     UFUNCTION(BlueprintCallable)
-    virtual void OnWeaponSelected(TSubclassOf<UAttackBase> SelectedWeaponClass);
+    virtual void OnWeaponSelected(TSubclassOf<UItem> SelectedWeaponClass);
 
     UPROPERTY(BlueprintReadOnly)
-    TArray<TSubclassOf<UAttackBase>> WeaponOptions;
+    TArray<TSubclassOf<UItem>> WeaponOptions;
 
     UPROPERTY(BlueprintReadOnly)
-    TSubclassOf<UAttackBase> SelectedWeaponClass;
+    TSubclassOf<UItem> SelectedWeaponClass;
 
     // Button and text references (BindWidget)
     UPROPERTY(meta = (BindWidget))

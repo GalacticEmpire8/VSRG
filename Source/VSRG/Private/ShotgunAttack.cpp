@@ -12,7 +12,7 @@
 void UShotgunAttack::InitializeAttack()
 {
 	Super::InitializeAttack();
-    coneHalfAngleDegrees = 50.0f;
+    coneHalfAngleDegrees = 70.0f;
 }
 
 void UShotgunAttack::ExecuteAttack(AMainCharacter* instigatorCharacter, FVector dir)
@@ -36,7 +36,7 @@ void UShotgunAttack::ExecuteAttack(AMainCharacter* instigatorCharacter, FVector 
 
         // Optionally offset spawn location to avoid self-collision
         FVector shotDirection = shotRotation.Vector();
-        FVector spawnOffset = shotDirection * 10.f;
+        FVector spawnOffset = shotDirection * 30.f;
         FVector finalSpawnLocation = spawnLocation + spawnOffset;
 
         // Spawn the projectile with the correct rotation
@@ -57,11 +57,11 @@ void UShotgunAttack::LevelUp() {
 
     switch (level) {
     case 2:
-        coneHalfAngleDegrees = 30.0f;
+        coneHalfAngleDegrees = 50.0f;
     case 4:
-        coneHalfAngleDegrees = 25.0f;
+        coneHalfAngleDegrees = 30.0f;
     case 6:
-        coneHalfAngleDegrees = 10.0f;
+        coneHalfAngleDegrees = 20.0f;
     }
 }
 

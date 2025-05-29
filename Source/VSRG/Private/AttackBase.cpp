@@ -122,5 +122,4 @@ void UAttackBase::LevelUp() {
 		usesLeft = uses;
 		isOnCooldown = false;
 
-	UE_LOG(LogTemp, Warning, TEXT("%s is now level %d"), *weaponName.ToString(), level);
 }
