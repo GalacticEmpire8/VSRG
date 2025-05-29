@@ -114,6 +114,11 @@ void ABasicEnemy::Move()
 
 void ABasicEnemy::EnemyAttack() 
 {
+	float ClampedDefense = FMath::Clamp(Player->defense, 0.0f, 100.0f);
+	float DamageMultiplier = 1.0f - (ClampedDefense / 100.0f);
+	float finalDamage = EnemyDamage * DamageMultiplier;
+	int32 RoundedDamage = FMath::RoundToInt(finalDamage);
+
 	AActor* MyOwner = GetOwner();
 	AController* MyOwnerInstigator = nullptr;
 	if (MyOwner)
@@ -121,6 +126,6 @@ void ABasicEnemy::EnemyAttack()
 		MyOwnerInstigator = MyOwner->GetInstigatorController();
 	}
 	UClass* DamageTypeClass = UDamageType::StaticClass();
-	UGameplayStatics::ApplyDamage(Player, EnemyDamage, MyOwnerInstigator, this, DamageTypeClass);
+	UGameplayStatics::ApplyDamage(Player, RoundedDamage, MyOwnerInstigator, this, DamageTypeClass);
 
 }

@@ -8,15 +8,17 @@
 #include "InputAction.h"
 #include "WeaponSelectionWidget.h"
 #include "WeaponDataRow.h"
+#include "HealthComponent.h"
 #include "MainCharacter.generated.h"
 
 
 class UAttackBase;
+class UPassiveBase;
 class AProjectile;
 
-struct FWeaponOption
+struct FItemOption
 {
-	FWeaponDataRow* DataRow;
+	FItemDataRow* DataRow;
 	int32 Rarity;
 	bool bIsOwned;
 };
@@ -63,6 +65,7 @@ private:
 
 public:
 	UAttackBase* equippedWeapon;
+	TArray<UPassiveBase*> passiveItems;
 
 	virtual void Tick(float DeltaSeconds) override;
 	virtual void SetupPlayerInputComponent(class UInputComponent* InputComponent) override;
@@ -101,7 +104,7 @@ public:
 	TMap<int32, UAttackBase*> attackSlots;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Upgrade System")
-	UDataTable* weaponDataTable;
+	UDataTable* itemDataTable;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Upgrade System")
 	UWeaponSelectionWidget* weaponSelectionWidget;
@@ -110,10 +113,15 @@ public:
 	TSubclassOf<UWeaponSelectionWidget> weaponSelectionWidgetClass;
 
 	UFUNCTION(BlueprintCallable)
-	void GrantWeapon(TSubclassOf<UAttackBase> WeaponClass);
+	void GrantWeapon(TSubclassOf<UItem> WeaponClass);
+
+	void GrantPassive(TSubclassOf<UItem> PassiveClass);
 
 	UFUNCTION()
 	void Debug_AddXP();
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
+	class UHealthComponent* healthComponent;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "XP")
 	float xpToNextLevel;
