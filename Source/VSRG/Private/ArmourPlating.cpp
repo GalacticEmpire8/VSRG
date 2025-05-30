@@ -14,7 +14,7 @@ void UArmourPlating::Apply(AMainCharacter* Character)
 
 void UArmourPlating::Upgrade(AMainCharacter* Character)
 {
-    if (Character && level <= 6)
+    if (Character && level < 6)
     {
         level++;
         Character->defense += 5.0f;

@@ -57,9 +57,9 @@ void UShotgunAttack::LevelUp() {
 
     switch (level) {
     case 2:
-        coneHalfAngleDegrees = 50.0f;
+        coneHalfAngleDegrees = 60.0f;
     case 4:
-        coneHalfAngleDegrees = 30.0f;
+        coneHalfAngleDegrees = 40.0f;
     case 6:
         coneHalfAngleDegrees = 20.0f;
     }

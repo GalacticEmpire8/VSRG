@@ -3,6 +3,10 @@
 
 #include "PassiveItem.h"
 
+UPassiveBase::UPassiveBase() {
+	level = 1;
+}
+
 void UPassiveBase::Apply(AMainCharacter* Character) {
 	// Default implementation does nothing, can be overridden in derived classes
 }
