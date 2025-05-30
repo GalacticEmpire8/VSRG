@@ -44,6 +44,7 @@ void UShotgunAttack::ExecuteAttack(AMainCharacter* instigatorCharacter, FVector 
         if (projectile)
         {
             projectile->damage = damage;
+            projectile->MaximumPirceCount = pierce;
             projectile->SetOwner(owningCharacter);
             projectile->SetActorRotation(shotDirection.Rotation());
             projectile->projectileComponent->Velocity = shotDirection * projectile->projectileComponent->InitialSpeed;

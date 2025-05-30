@@ -52,6 +52,7 @@ void USMGAttack::FireBurstProjectile()
 	if (projectile)
 	{
 		projectile->damage = damage;
+		projectile->MaximumPirceCount = pierce;
 		projectile->SetActorRotation(projectileDirection.Rotation());
 		projectile->projectileComponent->Velocity = projectileDirection * projectile->projectileComponent->InitialSpeed;
 		projectile->SetLifeSpan(0.2f);
