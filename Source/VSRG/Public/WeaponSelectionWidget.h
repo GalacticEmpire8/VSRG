@@ -18,7 +18,10 @@ class VSRG_API UWeaponSelectionWidget : public UUserWidget
 
 public:
     UFUNCTION(BlueprintCallable)
-    void InitWeaponOptions(const TArray<TSubclassOf<UItem>>& Options);
+    void InitWeaponOptions(
+        const TArray<TSubclassOf<UItem>>& Options,
+        const TArray<int32>& OptionLevels
+    );
 
     UFUNCTION(BlueprintCallable)
     virtual void OnWeaponSelected(TSubclassOf<UItem> SelectedWeaponClass);
@@ -43,6 +46,13 @@ public:
     class UTextBlock* WeaponText2;
     UPROPERTY(meta = (BindWidget))
     class UTextBlock* WeaponText3;
+
+    UPROPERTY(meta = (BindWidget))
+    class UTextBlock* WeaponDesc1;
+    UPROPERTY(meta = (BindWidget))
+    class UTextBlock* WeaponDesc2;
+    UPROPERTY(meta = (BindWidget))
+    class UTextBlock* WeaponDesc3;
 
 protected:
     virtual void NativeConstruct() override;

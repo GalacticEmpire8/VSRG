@@ -303,13 +303,15 @@ void AMainCharacter::LevelUp() {
 	TArray<FItemOption> OwnedOptions;
 	for (FItemDataRow* Row : allItems) {
 		if (!Row || !Row->itemClass) continue;
+
+		bool bIsWeapon = Row->itemClass->IsChildOf(UAttackBase::StaticClass());
 		int32* OwnedLevel = OwnedWeaponLevels.Find(Row->itemClass);
 		bool bIsOwned = OwnedLevel != nullptr;
 		bool bIsMaxed = bIsOwned && *OwnedLevel >= 6 && OwnedLevel;
 		if (bIsMaxed) continue; // Skip maxed weapons
 
-		// If all slots are filled, only offer owned weapons
-		if (bAllSlotsFilled && !bIsOwned) continue;
+		// Only restrict weapons if all slots are filled
+		if (bAllSlotsFilled && bIsWeapon && !bIsOwned) continue;
 
 		FItemOption Option{ Row, Row->rarity, bIsOwned };
 		Pool.Add(Option);
@@ -367,18 +369,25 @@ void AMainCharacter::LevelUp() {
 		}
 	}
 
-	// Prepare the final weapon class array for the widget
 	TArray<TSubclassOf<UItem>> WeaponClasses;
+	TArray<int32> WeaponLevels;
+
 	for (const FItemOption& Option : Selected) {
 		if (Option.DataRow && Option.DataRow->itemClass) {
 			WeaponClasses.Add(Option.DataRow->itemClass);
+
+			// For owned weapons, show the next upgrade (current level + 1)
+			// For unowned weapons, show level 1
+			int32* OwnedLevel = OwnedWeaponLevels.Find(Option.DataRow->itemClass);
+			int32 Level = OwnedLevel ? (*OwnedLevel + 1) : 1;
+			WeaponLevels.Add(Level);
 		}
 	}
 
 	if (weaponSelectionWidgetClass) {
 		weaponSelectionWidget = CreateWidget<UWeaponSelectionWidget>(GetWorld(), weaponSelectionWidgetClass);
 		if (weaponSelectionWidget) {
-			weaponSelectionWidget->InitWeaponOptions(WeaponClasses); // Only contains available options
+			weaponSelectionWidget->InitWeaponOptions(WeaponClasses, WeaponLevels); // Only contains available options
 			weaponSelectionWidget->AddToViewport();
 
 			if (APlayerController* PC = Cast<APlayerController>(GetController())) {
@@ -394,7 +403,22 @@ void AMainCharacter::LevelUp() {
 
 void AMainCharacter::GrantWeapon(TSubclassOf<UItem> WeaponClass)
 {
-	if (!WeaponClass) return;
+	if (!WeaponClass) {
+		UE_LOG(LogTemp, Warning, TEXT("WEAPON CLASS NOT VALID"));
+		return;
+	}
+	
+	
+	for (auto& Pair : attackSlots)
+	{
+		if (Pair.Value && Pair.Value->GetClass() == WeaponClass)
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Upgrading weapon %s from level %d"), *WeaponClass->GetName(), Pair.Value->level);
+			Pair.Value->LevelUp();
+			UE_LOG(LogTemp, Warning, TEXT("Weapon %s is now level %d"), *WeaponClass->GetName(), Pair.Value->level);
+			return;
+		}
+	}
 
 	// Check if the weapon already exists in any slot
 	for (auto& Pair : attackSlots)

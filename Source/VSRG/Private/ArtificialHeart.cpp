@@ -15,7 +15,7 @@ void UArtificialHeart::Apply(AMainCharacter* Character)
 
 void UArtificialHeart::Upgrade(AMainCharacter* Character)
 {
-    if (Character && level <= 6)
+    if (Character && level < 6)
     {
         level++;
         Character->healthComponent->MaxHealth += 10;

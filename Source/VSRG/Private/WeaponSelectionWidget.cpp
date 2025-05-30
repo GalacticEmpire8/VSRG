@@ -4,7 +4,10 @@
 #include "WeaponSelectionWidget.h"
 #include "MainCharacter.h"
 
-void UWeaponSelectionWidget::InitWeaponOptions(const TArray<TSubclassOf<UItem>>& Options)
+void UWeaponSelectionWidget::InitWeaponOptions(
+    const TArray<TSubclassOf<UItem>>& Options,
+    const TArray<int32>& OptionLevels
+)
 {
     WeaponOptions = Options;
 
@@ -14,14 +17,18 @@ void UWeaponSelectionWidget::InitWeaponOptions(const TArray<TSubclassOf<UItem>>&
         if (WeaponOptions.IsValidIndex(0) && WeaponOptions[0])
         {
             UItem* DefaultObj = WeaponOptions[0]->GetDefaultObject<UItem>();
+            int32 Level = OptionLevels[0];
             WeaponText1->SetText(DefaultObj->itemName);
+            WeaponDesc1->SetText(DefaultObj->itemDesc[Level - 1]);
             WeaponButton1->SetVisibility(ESlateVisibility::Visible);
             WeaponText1->SetVisibility(ESlateVisibility::Visible);
+            WeaponDesc1->SetVisibility(ESlateVisibility::Visible);
         }
         else
         {
             WeaponButton1->SetVisibility(ESlateVisibility::Collapsed);
             WeaponText1->SetVisibility(ESlateVisibility::Collapsed);
+            WeaponDesc1->SetVisibility(ESlateVisibility::Collapsed);
         }
     }
 
@@ -31,14 +38,18 @@ void UWeaponSelectionWidget::InitWeaponOptions(const TArray<TSubclassOf<UItem>>&
         if (WeaponOptions.IsValidIndex(1) && WeaponOptions[1])
         {
             UItem* DefaultObj = WeaponOptions[1]->GetDefaultObject<UItem>();
+            int32 Level = OptionLevels[1];
             WeaponText2->SetText(DefaultObj->itemName);
+            WeaponDesc2->SetText(DefaultObj->itemDesc[Level - 1]);
             WeaponButton2->SetVisibility(ESlateVisibility::Visible);
             WeaponText2->SetVisibility(ESlateVisibility::Visible);
+            WeaponDesc2->SetVisibility(ESlateVisibility::Visible);
         }
         else
         {
             WeaponButton2->SetVisibility(ESlateVisibility::Collapsed);
             WeaponText2->SetVisibility(ESlateVisibility::Collapsed);
+            WeaponDesc2->SetVisibility(ESlateVisibility::Collapsed);
         }
     }
 
@@ -48,18 +59,21 @@ void UWeaponSelectionWidget::InitWeaponOptions(const TArray<TSubclassOf<UItem>>&
         if (WeaponOptions.IsValidIndex(2) && WeaponOptions[2])
         {
             UItem* DefaultObj = WeaponOptions[2]->GetDefaultObject<UItem>();
+            int32 Level = OptionLevels[2];
             WeaponText3->SetText(DefaultObj->itemName);
+            WeaponDesc3->SetText(DefaultObj->itemDesc[Level - 1]);
             WeaponButton3->SetVisibility(ESlateVisibility::Visible);
             WeaponText3->SetVisibility(ESlateVisibility::Visible);
+            WeaponDesc3->SetVisibility(ESlateVisibility::Visible);
         }
         else
         {
             WeaponButton3->SetVisibility(ESlateVisibility::Collapsed);
             WeaponText3->SetVisibility(ESlateVisibility::Collapsed);
+            WeaponDesc3->SetVisibility(ESlateVisibility::Collapsed);
         }
     }
 }
-
 void UWeaponSelectionWidget::OnWeaponSelected(TSubclassOf<UItem> InSelectedWeaponClass)
 {
     SelectedWeaponClass = InSelectedWeaponClass;
@@ -68,15 +82,21 @@ void UWeaponSelectionWidget::OnWeaponSelected(TSubclassOf<UItem> InSelectedWeapo
     {
         if (AMainCharacter* MC = Cast<AMainCharacter>(PC->GetPawn()))
         {
+            UE_LOG(LogTemp, Warning, TEXT("Selected class: %s"), *InSelectedWeaponClass->GetName());
             if (InSelectedWeaponClass->IsChildOf(UAttackBase::StaticClass()))
             {
+                UE_LOG(LogTemp, Warning, TEXT("Calling GrantWeapon"));
                 MC->GrantWeapon(InSelectedWeaponClass);
             }
             else if (InSelectedWeaponClass->IsChildOf(UPassiveBase::StaticClass()))
             {
+                UE_LOG(LogTemp, Warning, TEXT("Calling GrantPassive"));
                 MC->GrantPassive(InSelectedWeaponClass);
             }
-            // Optionally handle other item types here
+            else
+            {
+                UE_LOG(LogTemp, Warning, TEXT("Selected class is not a weapon or passive!"));
+            }
         }
 
         PC->SetPause(false);

@@ -69,9 +69,10 @@ void UAttackBase::OnBeat() {
 }
 
 void UAttackBase::LevelUp() {
-	if (level == 6) return;
+    if (level == 6) return;
 
 	level++;
+    UE_LOG(LogTemp, Warning, TEXT("UAttackBase::LevelUp called, new level: %d"), level);
 
 	switch (level) {
     case 1:
@@ -118,8 +119,7 @@ void UAttackBase::LevelUp() {
         break;
     }
 
-    	cooldownLeft = 0;
-		usesLeft = uses;
-		isOnCooldown = false;
-
+    cooldownLeft = 0;
+	usesLeft = uses;
+	isOnCooldown = false;
 }
