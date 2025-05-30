@@ -34,6 +34,7 @@ void USniperAttack::ExecuteAttack(AMainCharacter* instigatorCharacter, FVector d
 	if (projectile)
 	{
 		projectile->damage = finalDamage;
+		projectile->MaximumPirceCount = pierce;
 		projectile->SetActorRotation(baseRotation);
 		projectile->projectileComponent->Velocity = forwardVector * projectile->projectileComponent->InitialSpeed;
 		projectile->SetLifeSpan(1.f);

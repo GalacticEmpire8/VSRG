@@ -48,6 +48,7 @@ void UPistolAttack::FireBurstProjectile()
 	if (projectile)
 	{
 		projectile->damage = damage;
+		projectile->MaximumPirceCount = pierce;
 		projectile->SetActorRotation(baseRotation);
 		projectile->projectileComponent->Velocity = forwardVector * projectile->projectileComponent->InitialSpeed;
 		projectile->SetLifeSpan(0.2f);
