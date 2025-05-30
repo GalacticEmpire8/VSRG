@@ -17,7 +17,12 @@ class VSRG_API UItem : public UObject
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Name")
 	FText itemName;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Description")
+	TArray<FText> itemDesc;
 	
 	UPROPERTY(BlueprintReadOnly, Category = "Attack")
 	int level;
+
+
 };

@@ -15,6 +15,8 @@ class VSRG_API UPassiveBase : public UItem
 {
     GENERATED_BODY()
 public:
+    UPassiveBase();
+
     virtual void Apply(AMainCharacter* Character);
     virtual void Upgrade(AMainCharacter* Character);
 };
