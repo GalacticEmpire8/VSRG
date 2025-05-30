@@ -40,9 +40,6 @@ void AVSRGGameMode::BeginPlay()
     class APlayerController* playerController = UGameplayStatics::GetPlayerController(this, 0);
     Player = Cast<AMainCharacter>(playerController->GetPawn());
     UGameplayStatics::PlaySound2D(GetWorld(), audioTrack, 1, 1, 0, NULL, this, true);
-
-    UE_LOG(LogTemp, Warning, TEXT("Player is %s"), *Player->GetName());
-    UE_LOG(LogTemp, Warning, TEXT("Play has begun"));
 }
 
 void AVSRGGameMode::Tick(float DeltaTime)
