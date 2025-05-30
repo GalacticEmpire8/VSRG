@@ -28,11 +28,7 @@ private:
 
 	//Time between beats
 	float TimeBetweenLastBeat;
-
 	
-
-	//Max ammount of enemies
-	int MaxEnemies = 5;
 
 	//When beat should be called
 	void BeatTimer(float DeltaTime);
@@ -53,6 +49,10 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = "Audio Track") class USoundBase* audioTrack;
 
 public:
+	//Max ammount of enemies
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int MaxEnemies = 8;
+
 	AVSRGGameMode();
 
 	//Current ammount of enemies
